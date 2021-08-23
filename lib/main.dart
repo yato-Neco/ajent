@@ -7,7 +7,7 @@ import 'Other/1.dart';
 import 'Settings_f/Security_Settings.dart';
 import 'Settings_f/User_Settings.dart';
 import 'Controller.dart';
-import 'lock_screen.dart';
+import 'Lock_screen/lock_screen.dart';
 import 'uppermenu/Upper1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
           pageTransitionsTheme: PageTransitionsTheme(
             builders: {
               TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-              //CupertinoPageTransitionsBuilder()はiosを追加しないと正しく動作しない↓
+              //CupertinoPageTransitionsBuilder()はiosを追加しないと正しく動作しない↓f
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
               TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
               TargetPlatform.windows: CupertinoPageTransitionsBuilder(),
@@ -200,11 +200,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     print('state = $state');
 
 
-
+    //バックグラウンドロックの処理
     if((state.toString() == "AppLifecycleState.inactive") && await Ssett?.return_bool() == true ){
       Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) {
-        return LockScreen(
+          .push(MaterialPageRoute(builder: (context) {
+        return LockScreen(true
         );
       }));
     }
@@ -220,6 +220,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
 
   void zen() async {
+
     user = await userNameGet();
 
     if (mounted) {
@@ -259,11 +260,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 new Text('Demo'),
                 new Text('Friend Add'),
                 new Text(''),
-                new RaisedButton(
+                new ElevatedButton(
                   onPressed: () => Navigator.pop(context, Answers.OK),
                   child: new Text('OK'),
                 ),
-                new RaisedButton(
+                new ElevatedButton(
                   onPressed: () => Navigator.pop(context, Answers.CLOSE),
                   child: new Text('Close'),
                 ),
@@ -310,6 +311,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         child: TextField(
           maxLines: 1,
           minLines: 1,
+          cursorColor: Colors.white,
           decoration: const InputDecoration(
               icon: Icon(Icons.search), labelText: "フレンド検索"),
           onChanged: (e) {
@@ -361,7 +363,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             children: [
               DrawerHeader(
 
-                child: user_menu(user),
+                child: user_menu("$user"),
                 decoration: BoxDecoration(
 
                   color: Colors.blue,

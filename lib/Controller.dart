@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'Account/Account_create.dart';
 import 'Settings_f/User_Settings.dart';
 import 'main.dart';
-import 'lock_screen.dart';
+import 'Lock_screen/lock_screen.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,7 @@ class Return_FristPage{
       //作り直し
       return MyHomePage(title: "Ajent", user: "None");
     }else if(setUP == true && locled == true){
-      return LockScreen();
+      return LockScreen(false);
     }
     else{
       return Acreate();
@@ -38,7 +38,7 @@ class Return_image_user{
   Return_image_user(this._image_user,this._image_back);
 
   image_user(){
-    return _image_user;
+    return _image_user!;
   }
 
   image_back(){
@@ -82,9 +82,28 @@ class Smart_lock{
     }
 
 
-    return await return_back_task();
+    return await return_back_task() ?? false;
 
   }
 
 }
 
+class FriendListClass{
+  int FrinedInt = 0;
+
+  var FriendList;
+
+  FriendListClass(this.FriendList);
+
+  int ReturnFrinedInt(){
+
+    return FrinedInt;
+
+  }
+
+  ReturnFrinedWiget(){
+
+
+  }
+
+}

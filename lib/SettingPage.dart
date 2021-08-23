@@ -38,11 +38,7 @@ class Settings extends State<Setting> {
 
   void set_screenlock() async {
     _screen_lock = (await return_screenlock())!;
-
-    if (mounted) {
-      // initState内でsetStateを呼び出すに必要
-      setState(() => _screen_lock = _screen_lock);
-    }
+    print(_screen_lock);
   }
 
   Future<bool?> return_screenlock() async {

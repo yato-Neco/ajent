@@ -6,28 +6,27 @@ class Up1 extends StatefulWidget {
 }
 
 class _up1 extends State<Up1> {
+
+  var text;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextButton(
-              style: ButtonStyle(),
-              onPressed: () {
+      body: ListView(
+        children: [
 
+          ListTile(
 
-              },
-              child: Text(
-                "始める",
-                style: TextStyle(fontSize: 30),
-              ),
-            ),
-          ],
-        ),
-      ),
+            title: Text("デモ"),
+            subtitle: Text("$text"),
+            onTap: (){
+
+            },
+            trailing: null,
+          )
+        ],
+      )
     );
   }
 }

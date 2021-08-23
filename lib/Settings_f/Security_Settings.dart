@@ -5,14 +5,23 @@ import 'package:ajent/Controller.dart';
 Smart_lock? Ssett;
 
 class SStting extends StatefulWidget {
+
+
+
   @override
   _sstinfs createState() => _sstinfs();
+
+
 }
 
 class _sstinfs extends State<SStting> {
   bool _screen_lock = false;
 
   bool _flag = false;
+
+
+
+
 
   @override
   void initState() {
@@ -22,17 +31,18 @@ class _sstinfs extends State<SStting> {
 
     set_screenlock();
 
-    if (mounted) {
-      // initState内でsetStateを呼び出すに必要
-      setState(() => _screen_lock = _screen_lock);
-      setState(() => _flag = _flag);
-    }
+
   }
 
   void set_screenlock() async {
     _screen_lock = (await return_screenlock())!;
 
-    _flag = await Ssett?.return_bool();
+    _flag = await (Ssett?.return_bool() ?? false)!;
+
+    if (mounted) {
+      // initState内でsetStateを呼び出すに必要
+      setState(() => _screen_lock = _screen_lock);
+    }
 
 
   }
@@ -101,10 +111,19 @@ class _sstinfs extends State<SStting> {
                       }
 
                       _save();
+                      print(a);
 
                       setState(() {
                         _screen_lock = a;
                       });
+
+                      if (_screen_lock == false) {
+                        setState(() {
+                          _flag = false;
+                        });
+                        Ssett = Smart_lock(_flag);
+                      }
+
                     },
                   ),
                 ),
@@ -122,7 +141,10 @@ class _sstinfs extends State<SStting> {
                   });
                   Ssett = Smart_lock(_flag);
                 }else{
-                  _flag = false;
+                  setState(() {
+                    _flag = false;
+
+                  });
 
                 }
 

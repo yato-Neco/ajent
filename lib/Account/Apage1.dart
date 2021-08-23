@@ -49,10 +49,14 @@ class _create1 extends State<Acreate1> {
             TextField(
               maxLengthEnforcement: MaxLengthEnforcement.none,
               enabled: true,
+              //入力する文字色を決める
+              cursorColor: Colors.white,
+
               // 入力数
               autofocus: true,
               maxLength: 10,
-              style: TextStyle(color: Colors.black),
+
+              //style: TextStyle(color: Colors.black),　//入力する文字色を決める
               obscureText: false,
               maxLines: 1,
               inputFormatters: <TextInputFormatter>[
@@ -69,23 +73,15 @@ class _create1 extends State<Acreate1> {
             TextButton(
               onPressed: () {
                 if ((user == null) || (user == "")) {
-
                   final snackBar = SnackBar(
-
                     content: Text('名前を入れてください'),
                     action: SnackBarAction(
                       label: '閉じる',
-                      onPressed: () {
-
-
-                      },
+                      onPressed: () {},
                     ),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-
-
-                }else {
+                } else {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
                     return Acreate2(

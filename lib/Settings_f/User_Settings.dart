@@ -5,44 +5,37 @@ import 'package:ajent/Controller.dart';
 
 Return_image_user? Imageset;
 
-
 class UStting extends StatefulWidget {
   @override
   _usttings createState() => _usttings();
 }
 
 class _usttings extends State<UStting> {
-
   FileImage? _image_user;
   FileImage? _image_back;
 
   final picker = ImagePicker();
 
-
   Future getImageFromGallery_user() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
+      // Unhandled Exception: Null check operator used on a null value がでる部分
       _image_user = FileImage(File(pickedFile!.path));
     });
 
-    Imageset = Return_image_user(_image_user,_image_back);
+    Imageset = Return_image_user(_image_user, _image_back);
   }
 
-
   Future getImageFromGallery_back() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       _image_back = FileImage(File(pickedFile!.path));
     });
 
-    Imageset = Return_image_user(_image_user,_image_back);
-
+    Imageset = Return_image_user(_image_user, _image_back);
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,37 +43,49 @@ class _usttings extends State<UStting> {
       appBar: AppBar(
         title: Text("ユーザー設定"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextButton(
-              style: ButtonStyle(),
-              onPressed: () {
+      body: ListView(
+        children: [
+          Card(
+            margin: EdgeInsets.only(
+              left: 10,
+              right: 10,
+              top: 15,
+              bottom: 15,
+            ),
+            child: ListTile(
+              leading: FloatingActionButton(
+                heroTag: "btn1",
 
-
-              },
-              child: Text(
-                "ユーザー設定",
-                style: TextStyle(fontSize: 30),
+                onPressed: getImageFromGallery_user, //ギャラリーから画像を取得
+                tooltip: 'Pick Image From Gallery',
+                child: Icon(Icons.photo_library),
               ),
+              title: Text("ユーザーアイコン"),
+              onTap: getImageFromGallery_user,
             ),
-            FloatingActionButton(
-              heroTag: "btn1",
+          ),
+          Card(
+            margin: EdgeInsets.only(
+              left: 10,
+              right: 10,
+              top: 15,
+              bottom: 15,
+            ),
 
-              onPressed: getImageFromGallery_user, //ギャラリーから画像を取得
-              tooltip: 'Pick Image From Gallery',
-              child: Icon(Icons.photo_library),
-            ),
-            FloatingActionButton(
-              heroTag: "btn2",
+            child: ListTile(
+              leading: FloatingActionButton(
 
-              onPressed: getImageFromGallery_back, //ギャラリーから画像を取得
-              tooltip: 'Pick Image From Gallery',
-              child: Icon(Icons.photo_library),
+                heroTag: "btn2",
+
+                onPressed: getImageFromGallery_back, //ギャラリーから画像を取得
+                tooltip: 'Pick Image From Gallery',
+                child: Icon(Icons.photo_library),
+              ),
+              title: Text("バックギャラリー"),
+              onTap: getImageFromGallery_back,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

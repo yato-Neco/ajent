@@ -89,9 +89,11 @@ class _create2 extends State<Acreate2> {
               maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
               enabled: true,
               autofocus: true,
+              cursorColor: Colors.white,
+
               // 入力数
               maxLength: 15,
-              style: TextStyle(color: Colors.black),
+              //style: TextStyle(color: Colors.black),
               obscureText: true,
               maxLines: 1,
               inputFormatters: <TextInputFormatter>[
@@ -110,14 +112,16 @@ class _create2 extends State<Acreate2> {
               keyboardType: TextInputType.number,
               maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
               enabled: true,
-              // 入力数
+              cursorColor: Colors.white,
 
+              // 入力数
               maxLength: 5,
-              style: TextStyle(color: Colors.black),
+              //style: TextStyle(color: Colors.black),
               obscureText: false,
               maxLines: 1,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly,
+
               ],
               decoration: const InputDecoration(
                 icon: Icon(Icons.title),
