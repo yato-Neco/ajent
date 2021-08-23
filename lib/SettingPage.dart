@@ -7,9 +7,6 @@ import 'package:provider/provider.dart';
 
 import 'dart:io';
 
-
-
-
 class Setting extends StatefulWidget {
   @override
   Settings createState() => Settings();
@@ -115,7 +112,6 @@ class Settings extends State<Setting> {
                     onChanged: (a) {},
                   ),
                 ),
-
                 Card(
                   margin: EdgeInsets.all(15.0),
                   shape: RoundedRectangleBorder(
@@ -133,12 +129,14 @@ class Settings extends State<Setting> {
                     ),
                     title: Text("ユーザー設定"),
                     subtitle: Text(""),
-
                     leading: Icon(
                       Icons.face,
                       size: 50.0,
                     ),
-                    trailing: Icon(Icons.arrow_right),
+                    trailing: Icon(
+                      Icons.arrow_right,
+                      size: 40,
+                    ),
                     onTap: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
@@ -168,7 +166,10 @@ class Settings extends State<Setting> {
                       Icons.lock,
                       size: 50.0,
                     ),
-                    trailing: Icon(Icons.arrow_right),
+                    trailing: Icon(
+                      Icons.arrow_right,
+                      size: 40,
+                    ),
                     onTap: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
