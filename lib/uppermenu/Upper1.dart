@@ -18,13 +18,41 @@ class _up1 extends State<Up1> {
 
           ListTile(
 
-            title: Text("デモ"),
+            title: Text("デモ1"),
             subtitle: Text("$text"),
             onTap: (){
 
             },
             trailing: null,
-          )
+          ),
+          ListTile(
+
+            title: Text("デモ2"),
+            subtitle: Text("$text"),
+            onTap: (){
+
+            },
+            trailing: null,
+          ),
+          ListTile(
+
+            title: Text("デモ3"),
+            subtitle: Text("$text"),
+            onTap: (){
+
+            },
+            trailing: null,
+          ),
+          ListTile(
+
+            title: Text("デモ4"),
+            subtitle: Text("$text"),
+            onTap: (){
+
+            },
+            trailing: null,
+          ),
+
         ],
       )
     );

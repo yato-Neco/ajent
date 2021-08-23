@@ -71,8 +71,7 @@ class TabPage extends StatefulWidget {
   _Tabpage createState() => _Tabpage();
 }
 
-class _Tabpage extends State<TabPage>  {
-
+class _Tabpage extends State<TabPage> {
   List<Widget> friend_list = [];
 
   List<Widget> Friend_void() {
@@ -96,12 +95,10 @@ class _Tabpage extends State<TabPage>  {
 
   int i = 0;
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -112,7 +109,7 @@ class _Tabpage extends State<TabPage>  {
 
                 _save() async {
                   SharedPreferences prefs =
-                  await SharedPreferences.getInstance();
+                      await SharedPreferences.getInstance();
                   await prefs.setBool("setUP", setUP);
                 }
 
@@ -167,7 +164,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin , WidgetsBindingObserver{
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   TabController? _controller;
 
   String? user;
@@ -180,7 +178,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     return user;
   }
 
-
   AppLifecycleState? _state;
 
   @override
@@ -189,26 +186,20 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     _controller = TabController(length: 2, vsync: this);
     WidgetsBinding.instance!.addObserver(this);
 
-
     zen();
-
-
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     print('state = $state');
 
-
     //バックグラウンドロックの処理
-    if((state.toString() == "AppLifecycleState.inactive") && await Ssett?.return_bool() == true ){
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) {
-        return LockScreen(true
-        );
+    if ((state.toString() == "AppLifecycleState.inactive") &&
+        await Ssett?.return_bool() == true) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return LockScreen(true);
       }));
     }
-
   }
 
   @override
@@ -217,10 +208,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     super.dispose();
   }
 
-
-
   void zen() async {
-
     user = await userNameGet();
 
     if (mounted) {
@@ -276,15 +264,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       switch (value!) {
         case Answers.OK:
           _setValue('OK');
+          print("OK");
           break;
         case Answers.CLOSE:
           _setValue('CLOSE');
+          print("CLOSE");
           break;
       }
     }
   }
-
-
 
   List<Widget> _buildTabs(BuildContext context) {
     return [
@@ -299,8 +287,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       Up1(),
     ];
   }
-
-
 
   List<Widget> friend_list = [];
 
@@ -326,13 +312,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   int i = 0;
 
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -341,53 +320,54 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       },
       child: Scaffold(
         appBar: AppBar(
-
+          systemOverlayStyle:
+              SystemUiOverlayStyle(statusBarColor: Colors.transparent),
           bottom: TabBar(
-
             controller: _controller,
             tabs: _buildTabs(context),
           ),
-
           title: Text(widget.title),
           actions: [
             IconButton(
-                tooltip: "You can change the settings of the app",
-                icon: Icon(Icons.settings),
-                onPressed: _Settings),
+              tooltip: "You can change the settings of the app",
+              icon: Icon(Icons.settings),
+              onPressed: _Settings,
+            ),
           ],
         ),
-        drawer: Drawer(
-
-          child: ListView(
-
-            children: [
-              DrawerHeader(
-
-                child: user_menu("$user"),
-                decoration: BoxDecoration(
-
-                  color: Colors.blue,
-                  image: Imageset?.image_back() == null ? null :  DecorationImage(image: Imageset?.image_back()) ,
-
-                ),
+        drawer: SafeArea(
+          child: Drawer(
+            child: Container(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    child: user_menu("$user"),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      image: Imageset?.image_back() == null
+                          ? null
+                          : DecorationImage(image: Imageset?.image_back()),
+                    ),
+                  ),
+                  ExpansionTile(
+                    title: ListTile(
+                      title: Text("フレンド"),
+                    ),
+                    children: Friend_void(),
+                  ),
+                ],
               ),
-              ExpansionTile(
-
-                title: ListTile(
-                  title: Text("フレンド"),
-                ),
-                children: Friend_void(),
-              ),
-            ],
+            ),
           ),
         ),
 
-        body:TabBarView(
-        controller: _controller,
-        children: _buildTabPages(),
+        body: TabBarView(
+          controller: _controller,
+          children: _buildTabPages(),
 
-      ),
-            /*
+        ),
+        /*
         Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -429,14 +409,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ),
         ),*/
         bottomNavigationBar: BottomNavigationBar(
-
           onTap: _CreateChatRoom,
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: 'Home',
-
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.add),
@@ -504,8 +482,16 @@ class user_menu extends StatelessWidget {
       children: [
         Row(
           children: [
-    Imageset?.image_user() == null ? Icon(Icons.face , size: 50,) :
-          Image(image: Imageset?.image_user(),width: 50,height: 50,),
+            Imageset?.image_user() == null
+                ? Icon(
+                    Icons.face,
+                    size: 50,
+                  )
+                : Image(
+                    image: Imageset?.image_user(),
+                    width: 50,
+                    height: 50,
+                  ),
             Text(
               "$user",
               style: TextStyle(

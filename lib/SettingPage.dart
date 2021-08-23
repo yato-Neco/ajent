@@ -237,10 +237,7 @@ class Settings extends State<Setting> {
                           if (i == 5) {
                             i = 0;
                             Navigator.of(context) //イースターエッグ
-                                .pushReplacement(
-                                    MaterialPageRoute(builder: (context) {
-                              return MyApp();
-                            }));
+                                .pop();
                           } else if (i > 5) {
                             i = 0;
                           } else {}
