@@ -59,6 +59,148 @@ class Settings extends State<Setting> {
       maxHeight = size.height - padding.top - kToolbarHeight;
     } else if (Platform.isIOS) {
       maxHeight = size.height - padding.top - padding.bottom - 22;
+
+    }
+
+
+
+    Future _showSimpleDialog() async {
+      String? result = "";
+      result = await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text('Select account'),
+            children: <Widget>[
+              SimpleDialogOption(
+                child: ListTile(
+                  title: Text('イースターエッグ'),
+                ),
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                    "イースターエッグ",
+                  );
+                },
+              ),
+              SimpleDialogOption(
+                child: ListTile(
+                  title: Text('back'),
+                ),
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                    "back",
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    /*
+      Future _showSimpleDialog() async {
+    String result = "";
+    result = await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text('Select account'),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.orange.shade200,
+                  child: Text(
+                    'U1',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                title: Text('user1@keicode.com'),
+              ),
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  "user1",
+                );
+              },
+            ),
+            SimpleDialogOption(
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.grey.shade400,
+                  child: Text(
+                    'U2',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                title: Text('user2@gmail.com'),
+              ),
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  "user2",
+                );
+              },
+            ),
+            SimpleDialogOption(
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.grey.shade700,
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+                title: Text('Add account'),
+              ),
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  "Add account",
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+    _setLabel(result);
+  }
+     */
+
+
+
+    Future<void> _showMyDialog() async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text('This is a demo alert dialog.'),
+                  Text('Would you like to approve of this message?'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Approve'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
 
     return Scaffold(
@@ -236,8 +378,18 @@ class Settings extends State<Setting> {
                           print(i);
                           if (i == 5) {
                             i = 0;
+
+
+                            //_showMyDialog();
+                            _showSimpleDialog();
+
+
+                            /*
+
                             Navigator.of(context) //イースターエッグ
                                 .pop();
+
+                             */
                           } else if (i > 5) {
                             i = 0;
                           } else {}
