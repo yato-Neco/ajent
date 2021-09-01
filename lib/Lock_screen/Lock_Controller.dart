@@ -19,7 +19,7 @@ class lock_controller {
 
   Return_lock_controller() async {
 
-
+    //バックグラウンドロックの設定引き出し
     Future<bool?> return_back_task() async {
       var _temp_s;
 
