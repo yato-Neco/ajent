@@ -131,7 +131,12 @@ class _sstinfs extends State<SStting> {
             ),
           ),
           Card(
-            margin: EdgeInsets.all(15),
+            margin: EdgeInsets.only(
+              left: 15,
+              right: 15,
+              top: 5,
+              bottom: 5,
+            ),
             child: ListTile(
               title: Text("バックグラウンドロック"),
               onTap: () {
@@ -168,6 +173,29 @@ class _sstinfs extends State<SStting> {
               ),
             ),
           ),
+
+          Card(
+            margin: EdgeInsets.only(
+              left: 15,
+              right: 15,
+              top: 5,
+              bottom: 5,
+            ),
+            child: ListTile(
+              title: Text("生体認証"),
+              onTap: () {
+
+              },
+              trailing: Checkbox(
+                activeColor: Colors.blue,
+                value: false,
+                onChanged: (e) {
+
+                },
+              ),
+            ),
+          ),
+
         ],
       ),
     );
