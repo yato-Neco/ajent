@@ -193,6 +193,11 @@ class _MyHomePageState extends State<MyHomePage>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     print('state = $state');
 
+
+    var test = lockScreen?.Return_lock_controller();
+
+    print(test);
+
     //バックグラウンドロックの処理
     if ((state.toString() == "AppLifecycleState.inactive") &&
         await Ssett?.return_bool() == true) {

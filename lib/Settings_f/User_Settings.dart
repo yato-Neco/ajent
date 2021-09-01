@@ -1,9 +1,13 @@
+import 'package:ajent/Lock_screen/Lock_Controller.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:ajent/Controller.dart';
 
+
 Return_image_user? Imageset;
+lock_controller? lockScreen;
+
 
 class UStting extends StatefulWidget {
   @override
@@ -14,10 +18,19 @@ class _usttings extends State<UStting> {
   FileImage? _image_user;
   FileImage? _image_back;
 
+
   final picker = ImagePicker();
 
   Future getImageFromGallery_user() async {
+
+
+    lockScreen = lock_controller(null,true);
+
+
+
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+
 
     setState(() {
       // Unhandled Exception: Null check operator used on a null value がでる部分
@@ -28,6 +41,11 @@ class _usttings extends State<UStting> {
   }
 
   Future getImageFromGallery_back() async {
+
+
+    lockScreen = lock_controller(null,true);
+
+
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
