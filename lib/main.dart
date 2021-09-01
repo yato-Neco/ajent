@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ajent/SettingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'Lock_screen/Lock_Controller.dart';
 import 'Other/1.dart';
 import 'Settings_f/Security_Settings.dart';
 import 'Settings_f/User_Settings.dart';
@@ -194,17 +195,22 @@ class _MyHomePageState extends State<MyHomePage>
     print('state = $state');
 
 
-    var test = lockScreen?.Return_lock_controller();
+    var test = await lockScreen?.Return_lock_controller();
 
-    print(test);
+
+
+    print("test $test");
 
     //バックグラウンドロックの処理
     if ((state.toString() == "AppLifecycleState.inactive") &&
-        await Ssett?.return_bool() == true) {
+        await lockScreen?.Return_lock_controller() == true) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return LockScreen(true);
       }));
     }
+
+    lockScreen = lock_controller(null,false);
+
   }
 
   @override

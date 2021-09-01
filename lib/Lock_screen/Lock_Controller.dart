@@ -20,9 +20,21 @@ class lock_controller {
   Return_lock_controller() async {
 
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    Future<bool?> return_back_task() async {
+      var _temp_s;
 
-    bool backg = prefs.getBool('locked') ?? false;
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      _temp_s = prefs.getBool('back') ?? false;
+
+      return _temp_s;
+    }
+
+
+    backg = (await return_back_task())!;
+
+    print("getImageFromGallery_bool $getImageFromGallery_bool");
+    print("backg $backg");
 
 
 
@@ -31,7 +43,7 @@ class lock_controller {
 
       return false;
 
-    }else if((backg == true) && (getImageFromGallery_bool == false)){
+    }else if((backg == true) && ((getImageFromGallery_bool == false) || (getImageFromGallery_bool == null))){
 
 
       return true;
