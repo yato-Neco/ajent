@@ -27,9 +27,21 @@ class _sstinfs extends State<SStting> {
   }
 
   void set_screenlock() async {
-    _screen_lock = (await return_screenlock())!;
 
-    _flag = await (Ssett?.return_bool() ?? false)!;
+    final isar = await openIsar();
+
+
+    final fstPage_isars =  isar.fstPage_isars;
+
+    var
+    setting = await fstPage_isars.get(0);
+
+
+
+
+    _screen_lock = (setting!.locled ?? false);
+
+    _flag =  (setting.back ?? false);
 
     if (mounted) {
       // initState内でsetStateを呼び出すに必要
@@ -94,14 +106,14 @@ class _sstinfs extends State<SStting> {
                     title: Text("画面ロック"),
                     subtitle: Text(''),
                     onChanged: (a) {
-                      print(a);
+
+
                       _save() async {
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
                         await prefs.setBool("locked", a);
                       }
 
-                      _save();
 
                       isar_save() async {
                         final isar = await openIsar();
@@ -136,9 +148,6 @@ class _sstinfs extends State<SStting> {
                         );
 
 
-                        Ssett = Smart_lock(_flag);
-
-
 
                         isar_save() async {
 
@@ -159,8 +168,6 @@ class _sstinfs extends State<SStting> {
                         }
 
                         isar_save();
-
-
 
 
 

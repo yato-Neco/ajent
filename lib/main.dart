@@ -247,23 +247,9 @@ class _MyHomePageState extends State<MyHomePage>
 
 
 
-    FristPage_Settingback() async {
-
-      final isar = await openIsar();
-
-      final fstPage_isars =  isar.fstPage_isars;
-
-      var
-      setting = await fstPage_isars.get(0);
-
-      return setting?.back;
-
-    }
-
-
     //バックグラウンドロックの処理
     if ((state.toString() == "AppLifecycleState.inactive") &&
-        await FristPage_Settingback() == true) {
+        await lockScreen?.Return_lock_controller() == true) {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) {
