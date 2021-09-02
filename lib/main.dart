@@ -9,10 +9,12 @@ import 'Settings_f/Security_Settings.dart';
 import 'Settings_f/User_Settings.dart';
 import 'Controller.dart';
 import 'Lock_screen/lock_screen.dart';
+import 'isar.g.dart';
 import 'uppermenu/Upper1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:isar/isar.dart';
 
 import 'package:flutter_sliding_tutorial/flutter_sliding_tutorial.dart';
 
@@ -25,18 +27,67 @@ void main() async {
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
+  final isar = await openIsar();
+
+  FristPage_SettingList() async {
+
+
+    final fstPage_isars =  isar.fstPage_isars;
+
+    var
+    setting = await fstPage_isars.get(0);
+
+    return setting?.fstPage_setting;
+
+  }
+
+  FristPage_SettingsetUP() async {
+
+
+    final fstPage_isars =  isar.fstPage_isars;
+
+    var
+    setting = await fstPage_isars.get(0);
+
+    return setting?.setUP;
+
+  }
+
+  FristPage_Settinglocked() async {
+
+
+    final fstPage_isars =  isar.fstPage_isars;
+
+    var
+    setting = await fstPage_isars.get(0);
+
+    return setting?.locled;
+
+  }
+
+
+
+
+  print("setUP ${await FristPage_SettingsetUP() ?? false}");
+
+
+
   fstPage = Return_FristPage(
-      prefs.getBool('setUP') ?? false, prefs.getBool('locked') ?? false);
+      await FristPage_SettingsetUP() ?? false, await FristPage_Settinglocked() ?? false, await FristPage_SettingList());
+
 
   runApp(MyApp());
 }
 
 enum Answers { OK, CLOSE } //Quick Addのボタン enumについては知らん
 
+
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
+
 
 class _MyAppState extends State<MyApp> {
   @override
@@ -195,22 +246,34 @@ class _MyHomePageState extends State<MyHomePage>
     print('state = $state');
 
 
-    var test = await lockScreen?.Return_lock_controller();
 
+    FristPage_Settingback() async {
 
+      final isar = await openIsar();
 
-    print("test $test");
+      final fstPage_isars =  isar.fstPage_isars;
+
+      var
+      setting = await fstPage_isars.get(0);
+
+      return setting?.back;
+
+    }
+
 
     //バックグラウンドロックの処理
     if ((state.toString() == "AppLifecycleState.inactive") &&
-        await lockScreen?.Return_lock_controller() == true) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return LockScreen(true);
-      }));
+        await FristPage_Settingback() == true) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return LockScreen(true);
+          },
+        ),
+      );
     }
 
-    lockScreen = lock_controller(null,false);
-
+    lockScreen = lock_controller(null, false);
   }
 
   @override
@@ -376,7 +439,6 @@ class _MyHomePageState extends State<MyHomePage>
         body: TabBarView(
           controller: _controller,
           children: _buildTabPages(),
-
         ),
         /*
         Center(

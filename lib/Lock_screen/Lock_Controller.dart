@@ -31,6 +31,9 @@ class lock_controller {
     }
 
 
+
+
+
     backg = (await return_back_task())!;
 
     print("getImageFromGallery_bool $getImageFromGallery_bool");
@@ -41,12 +44,12 @@ class lock_controller {
     if ((backg == true) && (getImageFromGallery_bool == true)){
 
 
-      return false;
-
-    }else if((backg == true) && ((getImageFromGallery_bool == false) || (getImageFromGallery_bool == null))){
-
-
       return true;
+
+    }else if((backg == false) && ((getImageFromGallery_bool == false) || (getImageFromGallery_bool == null))){
+
+
+      return false;
 
     }else{
 

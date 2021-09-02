@@ -2,20 +2,34 @@ import 'package:flutter/cupertino.dart';
 
 import 'Account/Account_create.dart';
 import 'Settings_f/User_Settings.dart';
+import 'isar.g.dart';
 import 'main.dart';
 import 'Lock_screen/lock_screen.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 
-class Return_FristPage{
+class Return_FristPage  {
   bool? setUP;
   bool? locled;
-  Return_FristPage(this.setUP,this.locled);
-  PageReturn(){
+
+  List<String>? fstPage_isarsList;
+
+
+
+
+
+  Return_FristPage(this.setUP,this.locled,this.fstPage_isarsList);
+  PageReturn() {
+
+    print("locled $locled");
+
+
+
 
     if(setUP == false){
       return Acreate();

@@ -4,9 +4,12 @@ import 'package:ajent/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:isar/isar.dart';
+
+import '../databace_isar.dart';
+import '../isar.g.dart';
 import 'Acontroller.dart';
 import 'package:uuid/uuid.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AcreateEND extends StatefulWidget {
   AcreateEND({required this.user, required this.pass, required this.num});
@@ -86,9 +89,32 @@ class _AcreateEND extends State<AcreateEND> {
     pass_save_hash();
     pass_save();
 
+    isar_save() async {
+      final isar = await openIsar();
+
+      var setting;
+
+      setting = fstPage_isar()
+        ..setUP = true
+        ..locled = true
+        ..passcode = false
+        ..seitai = false
+        ..id = 0
+        ..fstPage_setting = []
+      ;
+
+
+      await isar.writeTxn((isar) async {
+        await isar.fstPage_isars.put(setting); // insert
+      });
+    }
+
     Timer(
       Duration(seconds: 5),
-      () {
+      ()  {
+
+        isar_save();
+
         bool? setUP = true;
 
         _save() async {
@@ -97,6 +123,11 @@ class _AcreateEND extends State<AcreateEND> {
         }
 
         _save();
+
+
+
+
+
 
         /*
 
