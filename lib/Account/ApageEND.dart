@@ -11,6 +11,10 @@ import '../databace_isar.dart';
 import '../isar.g.dart';
 import 'Acontroller.dart';
 import 'package:uuid/uuid.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert'; // for the utf8.encode method
+
+
 
 class AcreateEND extends StatefulWidget {
   AcreateEND({required this.user, required this.pass, required this.num});
@@ -82,7 +86,15 @@ class _AcreateEND extends State<AcreateEND> {
 
       final storage = new FlutterSecureStorage();
 
-      await storage.write(key: 'CwhRGm', value: pass?.hashCode.toString());
+      var bytes = utf8.encode(pass!); // data being hashed
+      var digest = sha512.convert(bytes);
+
+
+      print("Digest as bytes: ${digest.bytes}");
+      print("Digest as hex string: $digest");
+
+
+      await storage.write(key: 'CwhRGm', value: digest.toString());
 
     }
 
