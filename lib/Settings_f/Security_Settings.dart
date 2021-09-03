@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ajent/Controller.dart';
 
 import '../databace_isar.dart';
@@ -100,13 +99,6 @@ class _sstinfs extends State<SStting> {
                     title: Text("画面ロック"),
                     subtitle: Text(''),
                     onChanged: (a) {
-
-
-                      _save() async {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        await prefs.setBool("locked", a);
-                      }
 
 
                       isar_save() async {
@@ -266,6 +258,47 @@ class _sstinfs extends State<SStting> {
             ),
             child: ListTile(
               title: Text("パスコード"),
+              onTap: () {
+                if (_screen_lock == true) {
+                  setState(
+                        () {
+                      _flag = !_flag;
+                    },
+                  );
+                } else {
+                  setState(
+                        () {
+                      _flag = false;
+                    },
+                  );
+                }
+              },
+              trailing: Checkbox(
+                activeColor: Colors.blue,
+                value: _flag,
+                onChanged: (e) {
+                  if (_screen_lock == true) {
+                    setState(
+                          () {
+                        _flag = e!;
+                      },
+                    );
+                  } else {
+                    _flag = false;
+                  }
+                },
+              ),
+            ),
+          ),
+          Card(
+            margin: EdgeInsets.only(
+              left: 15,
+              right: 15,
+              top: 5,
+              bottom: 5,
+            ),
+            child: ListTile(
+              title: Text("オート解除"),
               onTap: () {
                 if (_screen_lock == true) {
                   setState(

@@ -21,23 +21,26 @@ class lock_controller {
       return setting?.back;
     }
 
-    backg = (await FristPage_Settingback())!;
+    backg = await FristPage_Settingback() ?? false;
 
     print("getImageFromGallery_bool $getImageFromGallery_bool");
     print("backg $backg");
 
     if ((backg == true) && (getImageFromGallery_bool == true)) {
+      print(false);
       return false;
     } else if ((backg == true) && ((getImageFromGallery_bool == false))) {
+      print(true);
       return true;
     } else if ((backg == false) && ((getImageFromGallery_bool == false))) {
+      print(false);
       return false;
     } else if ((backg == false) && ((getImageFromGallery_bool == true))) {
+      print(false);
       return false;
     } else {
-      return true;
+      print(true);
+      return false;
     }
   }
 }
-
-

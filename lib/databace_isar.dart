@@ -18,6 +18,20 @@ class fstPage_isar {
   bool? passcode;
 
   bool? seitai;
+}
+
+@Collection()
+class user_data_isar {
+  int? id; // auto increment id
+
+  String? user_name;
+
+  int? number;
+
+  String? uuid;
+
+  List<String>? user_data;
+
 
 
 }

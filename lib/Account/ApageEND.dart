@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ajent/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:isar/isar.dart';
 
@@ -23,6 +24,16 @@ class AcreateEND extends StatefulWidget {
   @override
   _AcreateEND createState() => _AcreateEND(user, pass, num);
 }
+
+class MapChangeList {
+
+  String? key;
+  String? vule;
+
+
+  MapChangeList(this.key,this.vule);
+}
+
 
 class _AcreateEND extends State<AcreateEND> {
   String? pass;
@@ -61,10 +72,18 @@ class _AcreateEND extends State<AcreateEND> {
 
     print(Users!.Users_Datas());
 
+    Map? user_datas = Users?.Users_Datas();
+
+
+
+
     //もっとマシな関数名つけろ
     void _pWcFLU() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setInt("CwhRGm", pass!.hashCode);
+
+      final storage = new FlutterSecureStorage();
+
+      await storage.write(key: 'CwhRGm', value: pass?.hashCode.toString());
+
     }
 
     _pWcFLU();
@@ -107,22 +126,33 @@ class _AcreateEND extends State<AcreateEND> {
       await isar.writeTxn((isar) async {
         await isar.fstPage_isars.put(setting); // insert
       });
+
+      var userData;
+      List<String>? list = user_datas?.entries.map((e) => "${e.key}: ${e.value}").toList();
+
+      print(list is List<String>?);
+
+
+
+      userData = user_data_isar()
+      ..id = 0
+      ..user_name = user
+      ..number = num
+      ..uuid = uuidId
+      ..user_data = list;
+
+      await isar.writeTxn((isar) async {
+        await isar.user_data_isars.put(userData); // insert
+      });
+
+
     }
+
+    isar_save();
 
     Timer(
       Duration(seconds: 5),
       ()  {
-
-        isar_save();
-
-        bool? setUP = true;
-
-        _save() async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setBool("setUP", setUP);
-        }
-
-        _save();
 
 
 
