@@ -1,16 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../main.dart';
 
 class LockScreen extends StatefulWidget {
-
-
   bool pop = false;
 
-  LockScreen(bool p){
+  LockScreen(bool p) {
     pop = p;
-
   }
 
   @override
@@ -24,16 +23,26 @@ class _lockscreen extends State<LockScreen> {
 
   bool pop = false;
 
-  _lockscreen(p){
+  bool enabled = true;
+
+  _lockscreen(p) {
     pop = p;
   }
 
   GetPassHash() async {
     int? _temp;
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    _temp = prefs.getInt('CwhRGm');
+    final storage = new FlutterSecureStorage();
+
+
+    var asdaw = await storage.read(key: 'CwhRGm');
+
+    print(asdaw);
+
+
+    _temp =  int.parse(asdaw.toString());
+
 
     return _temp;
   }
@@ -58,7 +67,6 @@ class _lockscreen extends State<LockScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-
           title: Text("Ajent"),
         ),
         body: Center(
@@ -69,7 +77,7 @@ class _lockscreen extends State<LockScreen> {
                 keyboardType: TextInputType.visiblePassword,
                 maxLengthEnforcement:
                     MaxLengthEnforcement.truncateAfterCompositionEnds,
-                enabled: true,
+                enabled: enabled,
                 autofocus: true,
                 //入力する文字色を決める
                 cursorColor: Colors.white,
@@ -89,45 +97,99 @@ class _lockscreen extends State<LockScreen> {
                 //パスワード
                 onChanged: (e) {
                   haspeg = e.hashCode;
+
+                  if (CwhRGm == haspeg) {
+                    if (pop == true) {
+                      setState(() {
+                        enabled = false;
+                      });
+
+                      Timer(
+                        Duration(milliseconds: 500),
+                        () {
+                          Navigator.pop(
+                            context,
+                          );
+                        },
+                      );
+                    } else if (pop == false) {
+
+                      setState(() {
+                        enabled = false;
+                      });
+
+                      Timer(
+                        Duration(milliseconds: 500),
+                        () {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      MyHomePage(
+                                title: 'Ajent',
+                                user: null,
+                              ),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return ZoomPageTransitionsBuilder()
+                                    .buildTransitions(
+                                  MaterialPageRoute(
+                                    builder: (context) => MyHomePage(
+                                      title: 'Ajent',
+                                      user: null,
+                                    ),
+                                  ),
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                  child,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  }
                 },
               ),
               TextButton(
                 style: ButtonStyle(),
                 onPressed: () {
                   if (CwhRGm == haspeg) {
-
-                    if(pop == true){
+                    if (pop == true) {
                       Navigator.pop(
-                        context,);
-                      print(pop);
-
-                    }else if (pop == false){
+                        context,
+                      );
+                    } else if (pop == false) {
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) =>
-                              MyHomePage(
-                                title: 'Ajent',
-                                user: null,
-                              ),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  MyHomePage(
+                            title: 'Ajent',
+                            user: null,
+                          ),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
-                            return ZoomPageTransitionsBuilder().buildTransitions(
-                                MaterialPageRoute(
-                                  builder: (context) => MyHomePage(
-                                    title: 'Ajent',
-                                    user: null,
-                                  ),
-                                ),
-                                context,
-                                animation,
-                                secondaryAnimation,
-                                child);
+                            return ZoomPageTransitionsBuilder()
+                                .buildTransitions(
+                                    MaterialPageRoute(
+                                      builder: (context) => MyHomePage(
+                                        title: 'Ajent',
+                                        user: null,
+                                      ),
+                                    ),
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                    child);
                           },
                         ),
                       );
                     }
-
                   }
                 },
                 child: Text(
