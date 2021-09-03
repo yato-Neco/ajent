@@ -20,9 +20,6 @@ class Return_FristPage  {
   List<String>? fstPage_isarsList;
 
 
-
-
-
   Return_FristPage(this.setUP,this.locled,this.fstPage_isarsList);
   PageReturn() {
 
@@ -65,42 +62,7 @@ class Return_image_user{
 
 }
 
-class Smart_lock{
-  bool back_task;
 
-  Smart_lock(this.back_task){
-
-    _save() async {
-      SharedPreferences prefs =
-      await SharedPreferences.getInstance();
-      await prefs.setBool("back", back_task);
-    }
-    _save();
-  }
-
-
-
-
-
-
-  return_bool() async {
-
-    Future<bool?> return_back_task() async {
-      var _temp_s;
-
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      _temp_s = prefs.getBool('back') ?? false;
-
-      return _temp_s;
-    }
-
-
-    return await return_back_task() ?? false;
-
-  }
-
-}
 
 class FriendListClass{
   int FrinedInt = 0;
@@ -121,3 +83,4 @@ class FriendListClass{
   }
 
 }
+

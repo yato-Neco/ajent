@@ -5,7 +5,9 @@ import 'package:ajent/Controller.dart';
 import '../databace_isar.dart';
 import '../isar.g.dart';
 
-Smart_lock? Ssett;
+
+
+
 
 class SStting extends StatefulWidget {
   @override
@@ -49,15 +51,7 @@ class _sstinfs extends State<SStting> {
     }
   }
 
-  Future<bool?> return_screenlock() async {
-    var _temp_s;
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    _temp_s = prefs.getBool('locked') ?? false;
-
-    return _temp_s;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -279,7 +273,6 @@ class _sstinfs extends State<SStting> {
                       _flag = !_flag;
                     },
                   );
-                  Ssett = Smart_lock(_flag);
                 } else {
                   setState(
                         () {
@@ -298,7 +291,6 @@ class _sstinfs extends State<SStting> {
                         _flag = e!;
                       },
                     );
-                    Ssett = Smart_lock(_flag);
                   } else {
                     _flag = false;
                   }

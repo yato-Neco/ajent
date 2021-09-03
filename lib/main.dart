@@ -25,7 +25,6 @@ Return_FristPage? fstPage;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   final isar = await openIsar();
 
