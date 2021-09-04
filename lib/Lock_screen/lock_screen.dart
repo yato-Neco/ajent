@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert'; // for the utf8.encode method
 
 class LockScreen extends StatefulWidget {
 
@@ -18,9 +20,9 @@ class LockScreen extends StatefulWidget {
 }
 
 class _lockscreen extends State<LockScreen> {
-  int? haspeg;
+  String? haspeg;
 
-  int? CwhRGm;
+  String? CwhRGm;
 
   bool pop = false;
 
@@ -29,13 +31,24 @@ class _lockscreen extends State<LockScreen> {
   }
 
   GetPassHash() async {
-    int? _temp;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
+<<<<<<< HEAD
     _temp = prefs.getInt('CwhRGm');
 
     return _temp;
+=======
+    final storage = new FlutterSecureStorage();
+
+
+    var asdaw = await storage.read(key: 'CwhRGm');
+
+    print(asdaw);
+
+
+    return asdaw.toString();
+>>>>>>> dev
   }
 
   void _SetPassHash() async {
@@ -88,7 +101,73 @@ class _lockscreen extends State<LockScreen> {
                 ),
                 //パスワード
                 onChanged: (e) {
+<<<<<<< HEAD
                   haspeg = e.hashCode;
+=======
+
+
+                  var bytes = utf8.encode(e); // data being hashed
+                  var digest = sha512.convert(bytes);
+
+                  print(digest);
+
+                  haspeg = digest.toString();
+
+                  if (CwhRGm == haspeg) {
+                    if (pop == true) {
+                      setState(() {
+                        enabled = false;
+                      });
+
+                      Timer(
+                        Duration(milliseconds: 500),
+                        () {
+                          Navigator.pop(
+                            context,
+                          );
+                        },
+                      );
+                    } else if (pop == false) {
+
+                      setState(() {
+                        enabled = false;
+                      });
+
+                      Timer(
+                        Duration(milliseconds: 500),
+                        () {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      MyHomePage(
+                                title: 'Ajent',
+                                user: null,
+                              ),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return ZoomPageTransitionsBuilder()
+                                    .buildTransitions(
+                                  MaterialPageRoute(
+                                    builder: (context) => MyHomePage(
+                                      title: 'Ajent',
+                                      user: null,
+                                    ),
+                                  ),
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                  child,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  }
+>>>>>>> dev
                 },
               ),
               TextButton(

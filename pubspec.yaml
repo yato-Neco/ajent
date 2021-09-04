@@ -30,6 +30,22 @@ dependencies:
   uuid: ^3.0.4
   google_fonts: ^2.1.0
   image_picker: ^0.8.3+2
+<<<<<<< HEAD
+=======
+  flutter_secure_storage: ^4.2.1
+
+  crypto: ^3.0.1
+
+
+
+
+  cross_file: ^0.3.1+4
+
+
+  isar: ^0.4.0
+  isar_flutter_libs: ^0.4.0 # contains the binaries
+
+>>>>>>> dev
 
 
 

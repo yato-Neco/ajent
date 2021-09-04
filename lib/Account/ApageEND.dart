@@ -6,7 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Acontroller.dart';
 import 'package:uuid/uuid.dart';
+<<<<<<< HEAD
 import 'package:shared_preferences/shared_preferences.dart';
+=======
+import 'package:crypto/crypto.dart';
+import 'dart:convert'; // for the utf8.encode method
+
+
+>>>>>>> dev
 
 class AcreateEND extends StatefulWidget {
   AcreateEND({required this.user, required this.pass, required this.num});
@@ -60,8 +67,24 @@ class _AcreateEND extends State<AcreateEND> {
 
     //もっとマシな関数名つけろ
     void _pWcFLU() async {
+<<<<<<< HEAD
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setInt("CwhRGm", pass!.hashCode);
+=======
+
+      final storage = new FlutterSecureStorage();
+
+      var bytes = utf8.encode(pass!); // data being hashed
+      var digest = sha512.convert(bytes);
+
+
+      print("Digest as bytes: ${digest.bytes}");
+      print("Digest as hex string: $digest");
+
+
+      await storage.write(key: 'CwhRGm', value: digest.toString());
+
+>>>>>>> dev
     }
 
     _pWcFLU();
