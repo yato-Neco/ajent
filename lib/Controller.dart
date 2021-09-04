@@ -2,20 +2,30 @@ import 'package:flutter/cupertino.dart';
 
 import 'Account/Account_create.dart';
 import 'Settings_f/User_Settings.dart';
+import 'isar.g.dart';
 import 'main.dart';
 import 'Lock_screen/lock_screen.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:isar/isar.dart';
 
 
-class Return_FristPage{
+
+
+class Return_FristPage  {
   bool? setUP;
   bool? locled;
-  Return_FristPage(this.setUP,this.locled);
-  PageReturn(){
+
+  List<String>? fstPage_isarsList;
+
+
+  Return_FristPage(this.setUP,this.locled,this.fstPage_isarsList);
+  PageReturn() {
+
+    print("locled $locled");
+
+
+
 
     if(setUP == false){
       return Acreate();
@@ -51,42 +61,7 @@ class Return_image_user{
 
 }
 
-class Smart_lock{
-  bool back_task;
 
-  Smart_lock(this.back_task){
-
-    _save() async {
-      SharedPreferences prefs =
-      await SharedPreferences.getInstance();
-      await prefs.setBool("back", back_task);
-    }
-    _save();
-  }
-
-
-
-
-
-
-  return_bool() async {
-
-    Future<bool?> return_back_task() async {
-      var _temp_s;
-
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      _temp_s = prefs.getBool('back') ?? false;
-
-      return _temp_s;
-    }
-
-
-    return await return_back_task() ?? false;
-
-  }
-
-}
 
 class FriendListClass{
   int FrinedInt = 0;
@@ -107,3 +82,4 @@ class FriendListClass{
   }
 
 }
+
