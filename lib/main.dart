@@ -211,10 +211,7 @@ class _MyHomePageState extends State<MyHomePage>
 
     lockScreen = lock_controller(null, false);
 
-<<<<<<< HEAD
-    var test = await lockScreen?.Return_lock_controller();
-=======
->>>>>>> dev
+
 
     //バックグラウンドロックの処理
     if ((state.toString() == "AppLifecycleState.paused") &&

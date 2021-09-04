@@ -17,11 +17,7 @@ import 'package:flutter/widgets.dart';
 const _utf8Encoder = Utf8Encoder();
 
 final _schema =
-<<<<<<< HEAD
     '[{"name":"fstPage_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"fstPage_setting","type":11},{"name":"setUP","type":0},{"name":"locled","type":0},{"name":"back","type":0},{"name":"passcode","type":0},{"name":"seitai","type":0},{"name":"auto","type":0}],"indexes":[],"links":[]},{"name":"user_data_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"user_name","type":5},{"name":"number","type":3},{"name":"uuid","type":5},{"name":"user_data","type":11}],"indexes":[],"links":[]}]';
-=======
-    '[{"name":"fstPage_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"fstPage_setting","type":11},{"name":"setUP","type":0},{"name":"locled","type":0},{"name":"back","type":0},{"name":"passcode","type":0},{"name":"seitai","type":0}],"indexes":[],"links":[]},{"name":"user_data_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"user_name","type":5},{"name":"number","type":3},{"name":"uuid","type":5},{"name":"user_data","type":11}],"indexes":[],"links":[]}]';
->>>>>>> dev
 
 Future<Isar> openIsar(
     {String name = 'isar',
@@ -37,13 +33,8 @@ Future<Isar> openIsar(
       schema: _schema,
       getCollections: (isar) {
         final collectionPtrPtr = malloc<Pointer>();
-<<<<<<< HEAD
         final propertyOffsetsPtr = malloc<Uint32>(8);
         final propertyOffsets = propertyOffsetsPtr.asTypedList(8);
-=======
-        final propertyOffsetsPtr = malloc<Uint32>(7);
-        final propertyOffsets = propertyOffsetsPtr.asTypedList(7);
->>>>>>> dev
         final collections = <String, IsarCollection>{};
         nCall(IC.isar_get_collection(isar.ptr, collectionPtrPtr, 0));
         IC.isar_get_property_offsets(
@@ -52,11 +43,7 @@ Future<Isar> openIsar(
           isar: isar,
           adapter: _fstPage_isarAdapter(),
           ptr: collectionPtrPtr.value,
-<<<<<<< HEAD
           propertyOffsets: propertyOffsets.sublist(0, 8),
-=======
-          propertyOffsets: propertyOffsets.sublist(0, 7),
->>>>>>> dev
           propertyIds: {
             'id': 0,
             'fstPage_setting': 1,
@@ -64,12 +51,8 @@ Future<Isar> openIsar(
             'locled': 3,
             'back': 4,
             'passcode': 5,
-<<<<<<< HEAD
             'seitai': 6,
             'auto': 7
-=======
-            'seitai': 6
->>>>>>> dev
           },
           indexIds: {},
           linkIds: {},
@@ -145,13 +128,9 @@ class _fstPage_isarAdapter extends TypeAdapter<fstPage_isar> {
     final _passcode = value5;
     final value6 = object.seitai;
     final _seitai = value6;
-<<<<<<< HEAD
     final value7 = object.auto;
     final _auto = value7;
     final size = dynamicSize + 24;
-=======
-    final size = dynamicSize + 23;
->>>>>>> dev
 
     late int bufferSize;
     if (existingBufferSize != null) {
@@ -168,11 +147,7 @@ class _fstPage_isarAdapter extends TypeAdapter<fstPage_isar> {
     }
     rawObj.buffer_length = size;
     final buffer = rawObj.buffer.asTypedList(size);
-<<<<<<< HEAD
     final writer = BinaryWriter(buffer, 24);
-=======
-    final writer = BinaryWriter(buffer, 23);
->>>>>>> dev
     writer.writeLong(offsets[0], _id);
     writer.writeStringList(offsets[1], _fstPage_setting);
     writer.writeBool(offsets[2], _setUP);
@@ -180,10 +155,7 @@ class _fstPage_isarAdapter extends TypeAdapter<fstPage_isar> {
     writer.writeBool(offsets[4], _back);
     writer.writeBool(offsets[5], _passcode);
     writer.writeBool(offsets[6], _seitai);
-<<<<<<< HEAD
     writer.writeBool(offsets[7], _auto);
-=======
->>>>>>> dev
     return bufferSize;
   }
 
@@ -198,10 +170,7 @@ class _fstPage_isarAdapter extends TypeAdapter<fstPage_isar> {
     object.back = reader.readBoolOrNull(offsets[4]);
     object.passcode = reader.readBoolOrNull(offsets[5]);
     object.seitai = reader.readBoolOrNull(offsets[6]);
-<<<<<<< HEAD
     object.auto = reader.readBoolOrNull(offsets[7]);
-=======
->>>>>>> dev
     return object;
   }
 
@@ -222,11 +191,8 @@ class _fstPage_isarAdapter extends TypeAdapter<fstPage_isar> {
         return (reader.readBoolOrNull(offset)) as P;
       case 6:
         return (reader.readBoolOrNull(offset)) as P;
-<<<<<<< HEAD
       case 7:
         return (reader.readBoolOrNull(offset)) as P;
-=======
->>>>>>> dev
       default:
         throw 'Illegal propertyIndex';
     }
@@ -474,7 +440,6 @@ extension fstPage_isarQueryFilter
       value: value,
     ));
   }
-<<<<<<< HEAD
 
   QueryBuilder<fstPage_isar, QAfterFilterCondition> autoIsNull() {
     return addFilterCondition(FilterCondition(
@@ -491,8 +456,6 @@ extension fstPage_isarQueryFilter
       value: value,
     ));
   }
-=======
->>>>>>> dev
 }
 
 extension user_data_isarQueryFilter
@@ -775,7 +738,6 @@ extension fstPage_isarQueryWhereSortBy on QueryBuilder<fstPage_isar, QSortBy> {
   QueryBuilder<fstPage_isar, QAfterSortBy> sortBySeitaiDesc() {
     return addSortByInternal('seitai', Sort.Desc);
   }
-<<<<<<< HEAD
 
   QueryBuilder<fstPage_isar, QAfterSortBy> sortByAuto() {
     return addSortByInternal('auto', Sort.Asc);
@@ -784,8 +746,6 @@ extension fstPage_isarQueryWhereSortBy on QueryBuilder<fstPage_isar, QSortBy> {
   QueryBuilder<fstPage_isar, QAfterSortBy> sortByAutoDesc() {
     return addSortByInternal('auto', Sort.Desc);
   }
-=======
->>>>>>> dev
 }
 
 extension fstPage_isarQueryWhereSortThenBy
@@ -837,7 +797,6 @@ extension fstPage_isarQueryWhereSortThenBy
   QueryBuilder<fstPage_isar, QAfterSortBy> thenBySeitaiDesc() {
     return addSortByInternal('seitai', Sort.Desc);
   }
-<<<<<<< HEAD
 
   QueryBuilder<fstPage_isar, QAfterSortBy> thenByAuto() {
     return addSortByInternal('auto', Sort.Asc);
@@ -846,8 +805,6 @@ extension fstPage_isarQueryWhereSortThenBy
   QueryBuilder<fstPage_isar, QAfterSortBy> thenByAutoDesc() {
     return addSortByInternal('auto', Sort.Desc);
   }
-=======
->>>>>>> dev
 }
 
 extension user_data_isarQueryWhereSortBy
@@ -945,13 +902,10 @@ extension fstPage_isarQueryWhereDistinct
   QueryBuilder<fstPage_isar, QDistinct> distinctBySeitai() {
     return addDistinctByInternal('seitai');
   }
-<<<<<<< HEAD
 
   QueryBuilder<fstPage_isar, QDistinct> distinctByAuto() {
     return addDistinctByInternal('auto');
   }
-=======
->>>>>>> dev
 }
 
 extension user_data_isarQueryWhereDistinct
@@ -1004,13 +958,10 @@ extension fstPage_isarQueryProperty
   QueryBuilder<bool?, QQueryOperations> seitaiProperty() {
     return addPropertyName('seitai');
   }
-<<<<<<< HEAD
 
   QueryBuilder<bool?, QQueryOperations> autoProperty() {
     return addPropertyName('auto');
   }
-=======
->>>>>>> dev
 }
 
 extension user_data_isarQueryProperty
