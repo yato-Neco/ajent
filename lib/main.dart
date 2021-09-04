@@ -210,11 +210,18 @@ class _MyHomePageState extends State<MyHomePage>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     print('state = $state');
 
+    lockScreen = lock_controller(null, false);
+
+
+    bool? bglock = await lockScreen?.Return_lock_controller() ?? await lockScreen?.Return_lock_controller();
+
+
+    print("bglock $bglock");
+
 
 
     //バックグラウンドロックの処理
-    if ((state.toString() == "AppLifecycleState.paused") &&
-        await lockScreen?.Return_lock_controller() == true) {
+    if (bglock == true && (state.toString() == "AppLifecycleState.paused")) {
       Navigator.push(
         context,
         PageRouteBuilder(

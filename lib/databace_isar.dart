@@ -18,6 +18,9 @@ class fstPage_isar {
   bool? passcode;
 
   bool? seitai;
+
+  bool? auto;
+
 }
 
 @Collection()
