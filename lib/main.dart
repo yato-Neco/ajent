@@ -13,6 +13,7 @@ import 'Lock_screen/lock_screen.dart';
 import 'isar.g.dart';
 import 'uppermenu/Upper1.dart';
 import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:isar/isar.dart';
 
 import 'package:flutter_sliding_tutorial/flutter_sliding_tutorial.dart';
@@ -211,8 +212,11 @@ class _MyHomePageState extends State<MyHomePage>
 
     lockScreen = lock_controller(null, false);
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> dev
     //バックグラウンドロックの処理
     if ((state.toString() == "AppLifecycleState.paused") &&
         await lockScreen?.Return_lock_controller() == true) {

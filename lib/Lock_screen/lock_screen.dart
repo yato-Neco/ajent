@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../main.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert'; // for the utf8.encode method
 
 class LockScreen extends StatefulWidget {
   bool pop = false;
@@ -17,9 +19,9 @@ class LockScreen extends StatefulWidget {
 }
 
 class _lockscreen extends State<LockScreen> {
-  int? haspeg;
+  String? haspeg;
 
-  int? CwhRGm;
+  String? CwhRGm;
 
   bool pop = false;
 
@@ -30,7 +32,6 @@ class _lockscreen extends State<LockScreen> {
   }
 
   GetPassHash() async {
-    int? _temp;
 
 
     final storage = new FlutterSecureStorage();
@@ -41,10 +42,7 @@ class _lockscreen extends State<LockScreen> {
     print(asdaw);
 
 
-    _temp =  int.parse(asdaw.toString());
-
-
-    return _temp;
+    return asdaw.toString();
   }
 
   void _SetPassHash() async {
@@ -96,7 +94,14 @@ class _lockscreen extends State<LockScreen> {
                 ),
                 //パスワード
                 onChanged: (e) {
-                  haspeg = e.hashCode;
+
+
+                  var bytes = utf8.encode(e); // data being hashed
+                  var digest = sha512.convert(bytes);
+
+                  print(digest);
+
+                  haspeg = digest.toString();
 
                   if (CwhRGm == haspeg) {
                     if (pop == true) {
