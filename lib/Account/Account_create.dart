@@ -1,6 +1,5 @@
 import 'package:ajent/main.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'Apage1.dart';
 
 class Acreate extends StatefulWidget {
