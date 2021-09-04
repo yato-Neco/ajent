@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:ajent/SettingPage.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,8 @@ import 'Settings_f/Security_Settings.dart';
 import 'Settings_f/User_Settings.dart';
 import 'Controller.dart';
 import 'Lock_screen/lock_screen.dart';
+import 'isar.g.dart';
 import 'uppermenu/Upper1.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:isar/isar.dart';
@@ -24,10 +25,36 @@ Return_FristPage? fstPage;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final isar = await openIsar();
 
-  fstPage = Return_FristPage(
-      prefs.getBool('setUP') ?? false, prefs.getBool('locked') ?? false);
+  FristPage_SettingList() async {
+    final fstPage_isars = isar.fstPage_isars;
+
+    var setting = await fstPage_isars.get(0);
+
+    return setting?.fstPage_setting;
+  }
+
+  FristPage_SettingsetUP() async {
+    final fstPage_isars = isar.fstPage_isars;
+
+    var setting = await fstPage_isars.get(0);
+
+    return setting?.setUP;
+  }
+
+  FristPage_Settinglocked() async {
+    final fstPage_isars = isar.fstPage_isars;
+
+    var setting = await fstPage_isars.get(0);
+
+    return setting?.locled;
+  }
+
+  print("setUP ${await FristPage_SettingsetUP() ?? false}");
+
+  fstPage = Return_FristPage(await FristPage_SettingsetUP() ?? false,
+      await FristPage_Settinglocked() ?? false, await FristPage_SettingList());
 
   runApp(MyApp());
 }
@@ -109,13 +136,7 @@ class _Tabpage extends State<TabPage> {
               onPressed: () {
                 bool? setUP = false;
 
-                _save() async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setBool("setUP", setUP);
-                }
 
-                _save();
               },
               child: Text("C"),
             ),
@@ -172,13 +193,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   String? user;
 
-  Future<String?> userNameGet() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    user = prefs.getString("user") ?? "なし";
-
-    return user;
-  }
 
   AppLifecycleState? _state;
 
@@ -197,22 +212,29 @@ class _MyHomePageState extends State<MyHomePage>
 
     lockScreen = lock_controller(null, false);
 
-    var test = await lockScreen?.Return_lock_controller();
-
-
-
-    print("test $test");
-
     //バックグラウンドロックの処理
-    if ((state.toString() == "AppLifecycleState.inactive") &&
+    if ((state.toString() == "AppLifecycleState.paused") &&
         await lockScreen?.Return_lock_controller() == true) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return LockScreen(true);
-      }));
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              LockScreen(true),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return ZoomPageTransitionsBuilder().buildTransitions(
+                MaterialPageRoute(builder: (context) => LockScreen(true)),
+                context,
+                animation,
+                secondaryAnimation,
+                child);
+          },
+        ),
+      );
     }
 
-    lockScreen = lock_controller(null,false);
-
+    if (state.toString() == "AppLifecycleState.resumed") {
+      lockScreen = lock_controller(null, false);
+    }
   }
 
   @override
@@ -221,8 +243,48 @@ class _MyHomePageState extends State<MyHomePage>
     super.dispose();
   }
 
+
+
   void zen() async {
-    user = await userNameGet();
+
+      Map<String,String?>? demoMap = {
+        "user":null,
+        "number":null,
+        "uuid":null
+      };
+
+      user_dataDEMO() async {
+
+        final isar = await openIsar();
+
+        final test = isar.user_data_isars;
+
+        var user_data = await test.get(0);
+
+        return user_data?.user_data;
+      }
+
+      print("user_dataDEMO ${await user_dataDEMO()}");
+
+      List<String>? userData = await user_dataDEMO();
+
+      userData?.forEach((e) {
+
+
+        List<String> has = e.split(": ");
+
+
+        demoMap[has[0]] = has[1];
+
+
+      });
+
+      print(demoMap);
+
+
+
+
+    user = demoMap["user"];
 
     if (mounted) {
       // initState内でsetStateを呼び出すに必要
@@ -378,7 +440,6 @@ class _MyHomePageState extends State<MyHomePage>
         body: TabBarView(
           controller: _controller,
           children: _buildTabPages(),
-
         ),
         /*
         Center(

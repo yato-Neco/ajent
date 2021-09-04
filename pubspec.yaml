@@ -30,12 +30,24 @@ dependencies:
   uuid: ^3.0.4
   google_fonts: ^2.1.0
   image_picker: ^0.8.3+2
+  flutter_secure_storage: ^4.2.1
 
+  crypto: ^3.0.1
 
 
 
 
   cross_file: ^0.3.1+4
+
+
+  isar: ^0.4.0
+  isar_flutter_libs: ^0.4.0 # contains the binaries
+
+
+
+
+
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -44,6 +56,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+
+  isar_generator: ^0.4.0
+  build_runner: ^2.1.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

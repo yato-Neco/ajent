@@ -1,6 +1,5 @@
 import 'package:ajent/Settings_f/User_Settings.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'Settings_f/Security_Settings.dart';
 import 'main.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +16,6 @@ class Settings extends State<Setting> {
   int i = 0;
 
   bool _active = true;
-  bool _screen_lock = false;
   String? platform;
   String? aircraft;
   Color themcolr = Colors.white;
@@ -30,23 +28,10 @@ class Settings extends State<Setting> {
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    set_screenlock();
   }
 
-  void set_screenlock() async {
-    _screen_lock = (await return_screenlock())!;
-    print(_screen_lock);
-  }
 
-  Future<bool?> return_screenlock() async {
-    var _temp_s;
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    _temp_s = prefs.getBool('locked') ?? false;
-
-    return _temp_s;
-  }
 
   @override
   Widget build(BuildContext context) {

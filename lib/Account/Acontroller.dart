@@ -30,7 +30,7 @@ class datas {
 
     _Users_data['user'] = user;
 
-    _Users_data['number'] = number;
+    _Users_data['number'] = number.toString();
 
     _Users_data['uuid'] = uuid_uuid.return_uuid();
 
