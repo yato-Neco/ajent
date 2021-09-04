@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ajent/Controller.dart';
 
-import '../databace_isar.dart';
-import '../isar.g.dart';
-
-
-
-
+Smart_lock? Ssett;
 
 class SStting extends StatefulWidget {
+
+
+
   @override
   _sstinfs createState() => _sstinfs();
+
+
 }
 
 class _sstinfs extends State<SStting> {
   bool _screen_lock = false;
 
   bool _flag = false;
+
+
+
+
 
   @override
   void initState() {
@@ -25,32 +30,32 @@ class _sstinfs extends State<SStting> {
     WidgetsFlutterBinding.ensureInitialized();
 
     set_screenlock();
+
+
   }
 
   void set_screenlock() async {
+    _screen_lock = (await return_screenlock())!;
 
-    final isar = await openIsar();
-
-
-    final fstPage_isars =  isar.fstPage_isars;
-
-    var
-    setting = await fstPage_isars.get(0);
-
-
-
-
-    _screen_lock = (setting!.locled ?? false);
-
-    _flag =  (setting.back ?? false);
+    _flag = await (Ssett?.return_bool() ?? false)!;
 
     if (mounted) {
       // initState内でsetStateを呼び出すに必要
       setState(() => _screen_lock = _screen_lock);
     }
+
+
   }
 
+  Future<bool?> return_screenlock() async {
+    var _temp_s;
 
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    _temp_s = prefs.getBool('locked') ?? false;
+
+    return _temp_s;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,65 +104,26 @@ class _sstinfs extends State<SStting> {
                     title: Text("画面ロック"),
                     subtitle: Text(''),
                     onChanged: (a) {
-
-
-                      isar_save() async {
-                        final isar = await openIsar();
-
-                        var setting;
-
-                        setting = fstPage_isar()
-                          ..setUP = true
-                          ..locled = a
-                          ..id = 0
-                        ;
-
-
-                        await isar.writeTxn((isar) async {
-                          await isar.fstPage_isars.put(setting); // insert
-                        });
+                      _save() async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setBool("locked", a);
                       }
 
-                      isar_save();
+                      _save();
+                      print(a);
 
-                      setState(
-                        () {
-                          _screen_lock = a;
-                        },
-                      );
+                      setState(() {
+                        _screen_lock = a;
+                      });
 
                       if (_screen_lock == false) {
-                        setState(
-                          () {
-                            _flag = false;
-                          },
-                        );
-
-
-
-                        isar_save() async {
-
-                          final isar = await openIsar();
-
-                          var setting;
-
-                          setting = fstPage_isar()
-                            ..setUP = true
-                            ..back = false
-                            ..id = 0
-                          ;
-
-
-                          await isar.writeTxn((isar) async {
-                            await isar.fstPage_isars.put(setting); // insert
-                          });
-                        }
-
-                        isar_save();
-
-
-
+                        setState(() {
+                          _flag = false;
+                        });
+                        Ssett = Smart_lock(_flag);
                       }
+
                     },
                   ),
                 ),
@@ -175,114 +141,31 @@ class _sstinfs extends State<SStting> {
               title: Text("バックグラウンドロック"),
               onTap: () {
                 if (_screen_lock == true) {
-                  setState(
-                    () {
-                      _flag = !_flag;
-                    },
-                  );
-                  isar_save() async {
+                  setState(() {
+                    _flag = !_flag;
+                  });
+                  Ssett = Smart_lock(_flag);
+                }else{
+                  setState(() {
+                    _flag = false;
 
-                    final isar = await openIsar();
+                  });
 
-                    var setting;
+                }
 
-                    setting = fstPage_isar()
-                      ..setUP = true
-                      ..back = _flag
-                      ..id = 0
-                    ;
+                print(_flag);
+              },
+              trailing: Checkbox(
+                activeColor: Colors.blue,
+                value: _flag,
+                onChanged: (e) {
+                  print(e);
 
-
-                    await isar.writeTxn((isar) async {
-                      await isar.fstPage_isars.put(setting); // insert
+                  if (_screen_lock == true) {
+                    setState(() {
+                      _flag = e!;
                     });
-                  }
-
-                  isar_save();
-                } else {
-                  setState(
-                    () {
-                      _flag = false;
-                    },
-                  );
-                }
-              },
-              trailing: Checkbox(
-                activeColor: Colors.blue,
-                value: _flag,
-                onChanged: (e) {
-                  if (_screen_lock == true) {
-                    setState(
-                      () {
-                        _flag = e!;
-                      },
-                    );
-
-                    isar_save() async {
-
-                      final isar = await openIsar();
-
-                      var setting;
-
-                      setting = fstPage_isar()
-                        ..setUP = true
-                        ..locled = true
-                        ..back = e
-                        ..id = 0
-                      ;
-
-
-                      await isar.writeTxn((isar) async {
-                        await isar.fstPage_isars.put(setting); // insert
-                      });
-                    }
-
-                    isar_save();
-
-                  } else {
-                    _flag = false;
-
-
-
-                  }
-                },
-              ),
-            ),
-          ),
-          Card(
-            margin: EdgeInsets.only(
-              left: 15,
-              right: 15,
-              top: 5,
-              bottom: 5,
-            ),
-            child: ListTile(
-              title: Text("パスコード"),
-              onTap: () {
-                if (_screen_lock == true) {
-                  setState(
-                        () {
-                      _flag = !_flag;
-                    },
-                  );
-                } else {
-                  setState(
-                        () {
-                      _flag = false;
-                    },
-                  );
-                }
-              },
-              trailing: Checkbox(
-                activeColor: Colors.blue,
-                value: _flag,
-                onChanged: (e) {
-                  if (_screen_lock == true) {
-                    setState(
-                          () {
-                        _flag = e!;
-                      },
-                    );
+                    Ssett = Smart_lock(_flag);
                   } else {
                     _flag = false;
                   }
@@ -290,47 +173,7 @@ class _sstinfs extends State<SStting> {
               ),
             ),
           ),
-          Card(
-            margin: EdgeInsets.only(
-              left: 15,
-              right: 15,
-              top: 5,
-              bottom: 5,
-            ),
-            child: ListTile(
-              title: Text("オート解除"),
-              onTap: () {
-                if (_screen_lock == true) {
-                  setState(
-                        () {
-                      _flag = !_flag;
-                    },
-                  );
-                } else {
-                  setState(
-                        () {
-                      _flag = false;
-                    },
-                  );
-                }
-              },
-              trailing: Checkbox(
-                activeColor: Colors.blue,
-                value: _flag,
-                onChanged: (e) {
-                  if (_screen_lock == true) {
-                    setState(
-                          () {
-                        _flag = e!;
-                      },
-                    );
-                  } else {
-                    _flag = false;
-                  }
-                },
-              ),
-            ),
-          ),
+
           Card(
             margin: EdgeInsets.only(
               left: 15,
@@ -340,14 +183,19 @@ class _sstinfs extends State<SStting> {
             ),
             child: ListTile(
               title: Text("生体認証"),
-              onTap: () {},
+              onTap: () {
+
+              },
               trailing: Checkbox(
                 activeColor: Colors.blue,
                 value: false,
-                onChanged: (e) {},
+                onChanged: (e) {
+
+                },
               ),
             ),
           ),
+
         ],
       ),
     );
