@@ -1,15 +1,16 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
 class LockScreen extends StatefulWidget {
+
+
   bool pop = false;
 
-  LockScreen(bool p) {
+  LockScreen(bool p){
     pop = p;
+
   }
 
   @override
@@ -23,17 +24,16 @@ class _lockscreen extends State<LockScreen> {
 
   bool pop = false;
 
-  bool enabled = true;
-
-  _lockscreen(p) {
+  _lockscreen(p){
     pop = p;
   }
 
   GetPassHash() async {
     int? _temp;
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final storage = new FlutterSecureStorage();
+    _temp = prefs.getInt('CwhRGm');
 
 
     var asdaw = await storage.read(key: 'CwhRGm');
@@ -41,10 +41,7 @@ class _lockscreen extends State<LockScreen> {
     print(asdaw);
 
 
-    _temp =  int.parse(asdaw.toString());
-
-
-    return _temp;
+    return asdaw.toString();
   }
 
   void _SetPassHash() async {
@@ -67,6 +64,7 @@ class _lockscreen extends State<LockScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
+
           title: Text("Ajent"),
         ),
         body: Center(
@@ -77,7 +75,7 @@ class _lockscreen extends State<LockScreen> {
                 keyboardType: TextInputType.visiblePassword,
                 maxLengthEnforcement:
                     MaxLengthEnforcement.truncateAfterCompositionEnds,
-                enabled: enabled,
+                enabled: true,
                 autofocus: true,
                 //入力する文字色を決める
                 cursorColor: Colors.white,
@@ -96,7 +94,14 @@ class _lockscreen extends State<LockScreen> {
                 ),
                 //パスワード
                 onChanged: (e) {
-                  haspeg = e.hashCode;
+
+
+                  var bytes = utf8.encode(e); // data being hashed
+                  var digest = sha512.convert(bytes);
+
+                  print(digest);
+
+                  haspeg = digest.toString();
 
                   if (CwhRGm == haspeg) {
                     if (pop == true) {
@@ -158,38 +163,39 @@ class _lockscreen extends State<LockScreen> {
                 style: ButtonStyle(),
                 onPressed: () {
                   if (CwhRGm == haspeg) {
-                    if (pop == true) {
+
+                    if(pop == true){
                       Navigator.pop(
-                        context,
-                      );
-                    } else if (pop == false) {
+                        context,);
+                      print(pop);
+
+                    }else if (pop == false){
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  MyHomePage(
-                            title: 'Ajent',
-                            user: null,
-                          ),
+                          pageBuilder: (context, animation, secondaryAnimation) =>
+                              MyHomePage(
+                                title: 'Ajent',
+                                user: null,
+                              ),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
-                            return ZoomPageTransitionsBuilder()
-                                .buildTransitions(
-                                    MaterialPageRoute(
-                                      builder: (context) => MyHomePage(
-                                        title: 'Ajent',
-                                        user: null,
-                                      ),
-                                    ),
-                                    context,
-                                    animation,
-                                    secondaryAnimation,
-                                    child);
+                            return ZoomPageTransitionsBuilder().buildTransitions(
+                                MaterialPageRoute(
+                                  builder: (context) => MyHomePage(
+                                    title: 'Ajent',
+                                    user: null,
+                                  ),
+                                ),
+                                context,
+                                animation,
+                                secondaryAnimation,
+                                child);
                           },
                         ),
                       );
                     }
+
                   }
                 },
                 child: Text(

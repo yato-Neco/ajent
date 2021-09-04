@@ -3,14 +3,11 @@ import 'dart:async';
 import 'package:ajent/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:isar/isar.dart';
-
-import '../databace_isar.dart';
-import '../isar.g.dart';
 import 'Acontroller.dart';
 import 'package:uuid/uuid.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert'; // for the utf8.encode method
 
 class AcreateEND extends StatefulWidget {
   AcreateEND({required this.user, required this.pass, required this.num});
@@ -24,16 +21,6 @@ class AcreateEND extends StatefulWidget {
   @override
   _AcreateEND createState() => _AcreateEND(user, pass, num);
 }
-
-class MapChangeList {
-
-  String? key;
-  String? vule;
-
-
-  MapChangeList(this.key,this.vule);
-}
-
 
 class _AcreateEND extends State<AcreateEND> {
   String? pass;
@@ -72,17 +59,20 @@ class _AcreateEND extends State<AcreateEND> {
 
     print(Users!.Users_Datas());
 
-    Map? user_datas = Users?.Users_Datas();
-
-
-
-
     //もっとマシな関数名つけろ
     void _pWcFLU() async {
 
       final storage = new FlutterSecureStorage();
 
-      await storage.write(key: 'CwhRGm', value: pass?.hashCode.toString());
+      var bytes = utf8.encode(pass!); // data being hashed
+      var digest = sha512.convert(bytes);
+
+
+      print("Digest as bytes: ${digest.bytes}");
+      print("Digest as hex string: $digest");
+
+
+      await storage.write(key: 'CwhRGm', value: digest.toString());
 
     }
 
@@ -108,56 +98,17 @@ class _AcreateEND extends State<AcreateEND> {
     pass_save_hash();
     pass_save();
 
-    isar_save() async {
-      final isar = await openIsar();
-
-      var setting;
-
-      setting = fstPage_isar()
-        ..setUP = true
-        ..locled = true
-        ..passcode = false
-        ..seitai = false
-        ..id = 0
-        ..fstPage_setting = []
-      ;
-
-
-      await isar.writeTxn((isar) async {
-        await isar.fstPage_isars.put(setting); // insert
-      });
-
-      var userData;
-      List<String>? list = user_datas?.entries.map((e) => "${e.key}: ${e.value}").toList();
-
-      print(list is List<String>?);
-
-
-
-      userData = user_data_isar()
-      ..id = 0
-      ..user_name = user
-      ..number = num
-      ..uuid = uuidId
-      ..user_data = list;
-
-      await isar.writeTxn((isar) async {
-        await isar.user_data_isars.put(userData); // insert
-      });
-
-
-    }
-
-    isar_save();
-
     Timer(
       Duration(seconds: 5),
-      ()  {
+      () {
+        bool? setUP = true;
 
+        _save() async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool("setUP", setUP);
+        }
 
-
-
-
+        _save();
 
         /*
 
