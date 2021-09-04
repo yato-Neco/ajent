@@ -13,7 +13,6 @@ import 'Lock_screen/lock_screen.dart';
 import 'isar.g.dart';
 import 'uppermenu/Upper1.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:isar/isar.dart';
 
 import 'package:flutter_sliding_tutorial/flutter_sliding_tutorial.dart';
@@ -210,6 +209,7 @@ class _MyHomePageState extends State<MyHomePage>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     print('state = $state');
 
+    lockScreen = lock_controller(null, false);
 
 
     //バックグラウンドロックの処理
