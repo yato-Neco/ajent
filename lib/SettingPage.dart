@@ -56,7 +56,7 @@ class Settings extends State<Setting> {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text('Select account'),
+            title: Text(''),
             children: <Widget>[
               SimpleDialogOption(
                 child: ListTile(

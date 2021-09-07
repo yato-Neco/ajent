@@ -1,11 +1,20 @@
 import 'dart:async';
 
+import 'package:ajent/Settings_f/User_Settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../main.dart';
 import 'package:crypto/crypto.dart';
-import 'dart:convert'; // for the utf8.encode method
+import 'dart:convert';
+
+import 'Lock_Controller.dart'; // for the utf8.encode method
+
+
+bool? comeback;
+
+
+
 
 class LockScreen extends StatefulWidget {
   bool pop = false;
@@ -53,6 +62,16 @@ class _lockscreen extends State<LockScreen> {
   void initState() {
     _SetPassHash();
 
+    print("locked------------------");
+
+    lockScreen = lock_controller(null, false, true);
+
+
+    comeback = true;
+    print("1");
+
+
+
     super.initState();
   }
 
@@ -99,8 +118,6 @@ class _lockscreen extends State<LockScreen> {
                   var bytes = utf8.encode(e); // data being hashed
                   var digest = sha512.convert(bytes);
 
-                  print(digest);
-
                   haspeg = digest.toString();
 
                   if (CwhRGm == haspeg) {
@@ -114,6 +131,7 @@ class _lockscreen extends State<LockScreen> {
                         () {
                           Navigator.pop(
                             context,
+                            false
                           );
                         },
                       );
@@ -127,13 +145,14 @@ class _lockscreen extends State<LockScreen> {
                         Duration(milliseconds: 500),
                         () {
                           Navigator.pushReplacement(
+
                             context,
+
                             PageRouteBuilder(
                               pageBuilder:
                                   (context, animation, secondaryAnimation) =>
                                       MyHomePage(
                                 title: 'Ajent',
-                                user: null,
                               ),
                               transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) {
@@ -142,7 +161,6 @@ class _lockscreen extends State<LockScreen> {
                                   MaterialPageRoute(
                                     builder: (context) => MyHomePage(
                                       title: 'Ajent',
-                                      user: null,
                                     ),
                                   ),
                                   context,
@@ -151,8 +169,11 @@ class _lockscreen extends State<LockScreen> {
                                   child,
                                 );
                               },
+
                             ),
+
                           );
+
                         },
                       );
                     }
@@ -166,6 +187,7 @@ class _lockscreen extends State<LockScreen> {
                     if (pop == true) {
                       Navigator.pop(
                         context,
+                        false
                       );
                     } else if (pop == false) {
                       Navigator.pushReplacement(
@@ -175,7 +197,6 @@ class _lockscreen extends State<LockScreen> {
                               (context, animation, secondaryAnimation) =>
                                   MyHomePage(
                             title: 'Ajent',
-                            user: null,
                           ),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
@@ -184,7 +205,6 @@ class _lockscreen extends State<LockScreen> {
                                     MaterialPageRoute(
                                       builder: (context) => MyHomePage(
                                         title: 'Ajent',
-                                        user: null,
                                       ),
                                     ),
                                     context,

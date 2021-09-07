@@ -6,7 +6,9 @@ class lock_controller {
   bool? backg;
   bool? getImageFromGallery_bool;
 
-  lock_controller(this.backg, this.getImageFromGallery_bool);
+  bool? ch;
+
+  lock_controller(this.backg, this.getImageFromGallery_bool,this.ch);
 
   Return_lock_controller() async {
     //バックグラウンドロックの設定引き出し
@@ -21,21 +23,20 @@ class lock_controller {
       return setting?.back;
     }
 
+
     backg = await FristPage_Settingback() ?? false;
 
-    print("getImageFromGallery_bool $getImageFromGallery_bool");
-    print("backg $backg");
 
-    if ((backg == true) && (getImageFromGallery_bool == true)) {
+    if (( backg == true) && (getImageFromGallery_bool == true)) {
       print(false);
       return false;
-    } else if ((backg == true) && ((getImageFromGallery_bool == false))) {
+    } else if (( backg == true) && ((getImageFromGallery_bool == false))) {
       print(true);
       return true;
-    } else if ((backg == false) && ((getImageFromGallery_bool == false))) {
+    } else if (( backg == false) && ((getImageFromGallery_bool == false))) {
       print(false);
       return false;
-    } else if ((backg == false) && ((getImageFromGallery_bool == true))) {
+    } else if (( backg == false) && ((getImageFromGallery_bool == true))) {
       print(false);
       return false;
     } else {

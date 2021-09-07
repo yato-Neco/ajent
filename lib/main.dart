@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'Lock_screen/Lock_Controller.dart';
 import 'Other/1.dart';
+import 'Other/Chat_demo.dart';
 import 'Settings_f/Security_Settings.dart';
 import 'Settings_f/User_Settings.dart';
 import 'Controller.dart';
@@ -134,9 +135,10 @@ class _Tabpage extends State<TabPage> {
           children: <Widget>[
             TextButton(
               onPressed: () {
-                bool? setUP = false;
-
-
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)
+                {
+                  return TestPage2("local");
+                }));
               },
               child: Text("C"),
             ),
@@ -167,19 +169,9 @@ class _Tabpage extends State<TabPage> {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title, required this.user})
+  MyHomePage({Key? key, required this.title})
       : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  late final String? user;
 
   final String title;
 
@@ -193,6 +185,9 @@ class _MyHomePageState extends State<MyHomePage>
 
   String? user;
 
+  bool? sc = false;
+
+  bool? test = true;
 
 
   AppLifecycleState? _state;
@@ -204,18 +199,52 @@ class _MyHomePageState extends State<MyHomePage>
     WidgetsBinding.instance!.addObserver(this);
 
     zen();
+
+    lock_controller(null, false, false);
+
+    comeback = false;
+    sc = false;
+
+    print("main.dart");
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     print('state = $state');
 
-    lockScreen = lock_controller(null, false);
+
+    //print("await lockScreen?.Return_lock_controller() ${ await lockScreen?.Return_lock_controller()}");
+
+
+    FristPage_Settingback() async {
+      final isar = await openIsar();
+
+      final fstPage_isars = isar.fstPage_isars;
+
+      var setting = await fstPage_isars.get(0);
+
+      return setting?.back;
+    }
+
+
+    print("comebac ${comeback}");
+
+
+    if (sc == true && comeback == true) {
+      test = true;
+    } else if (sc == false && comeback == false) {
+      test = true;
+    } else if (sc == false && comeback == true) {
+      test = false;
+    }
+    else {
+      test = false;
+    }
 
 
     //バックグラウンドロックの処理
-    if ((state.toString() == "AppLifecycleState.paused") &&
-        await lockScreen?.Return_lock_controller() == true) {
+    if (state.toString() == "AppLifecycleState.paused" &&
+        await lockScreen?.Return_lock_controller() == true && test == true) {
       Navigator.push(
         context,
         PageRouteBuilder(
@@ -223,18 +252,50 @@ class _MyHomePageState extends State<MyHomePage>
               LockScreen(true),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return ZoomPageTransitionsBuilder().buildTransitions(
-                MaterialPageRoute(builder: (context) => LockScreen(true)),
-                context,
-                animation,
-                secondaryAnimation,
-                child);
+              MaterialPageRoute(builder: (context) => LockScreen(true)),
+              context,
+              animation,
+              secondaryAnimation,
+              child,
+            );
           },
         ),
-      );
+      ).then((value) {
+        print("value ${value}");
+        sc = value;
+        comeback = false;
+      });
     }
 
+    /*
     if (state.toString() == "AppLifecycleState.resumed") {
-      lockScreen = lock_controller(null, false);
+      lockScreen = lock_controller(null, lockScreen?.getImageFromGallery_bool , false);
+
+
+    }
+
+
+
+    if (state.toString() == "AppLifecycleState.inactive") {
+      lockScreen = lock_controller(null, lockScreen?.getImageFromGallery_bool ,false);
+
+
+
+
+    }
+
+
+
+
+     */
+
+
+    if (state.toString() == "AppLifecycleState.resumed") {
+      lockScreen =
+          lock_controller(null, false, false);
+
+
+      print("0");
     }
   }
 
@@ -244,46 +305,34 @@ class _MyHomePageState extends State<MyHomePage>
     super.dispose();
   }
 
-
-
   void zen() async {
+    Map<String, String?>? demoMap = {
+      "user": null,
+      "number": null,
+      "uuid": null
+    };
 
-      Map<String,String?>? demoMap = {
-        "user":null,
-        "number":null,
-        "uuid":null
-      };
+    user_dataDEMO() async {
+      final isar = await openIsar();
 
-      user_dataDEMO() async {
+      final test = isar.user_data_isars;
 
-        final isar = await openIsar();
+      var user_data = await test.get(0);
 
-        final test = isar.user_data_isars;
+      return user_data?.user_data;
+    }
 
-        var user_data = await test.get(0);
+    print("user_dataDEMO ${await user_dataDEMO()}");
 
-        return user_data?.user_data;
-      }
+    List<String>? userData = await user_dataDEMO();
 
-      print("user_dataDEMO ${await user_dataDEMO()}");
+    userData?.forEach((e) {
+      List<String> has = e.split(": ");
 
-      List<String>? userData = await user_dataDEMO();
+      demoMap[has[0]] = has[1];
+    });
 
-      userData?.forEach((e) {
-
-
-        List<String> has = e.split(": ");
-
-
-        demoMap[has[0]] = has[1];
-
-
-      });
-
-      print(demoMap);
-
-
-
+    print(demoMap);
 
     user = demoMap["user"];
 
@@ -352,13 +401,16 @@ class _MyHomePageState extends State<MyHomePage>
 
   List<Widget> _buildTabs(BuildContext context) {
     return [
+
       Tab(text: 'Home'),
       Tab(text: 'Chat'),
+
     ];
   }
 
   List<Widget> _buildTabPages() {
     return [
+
       TabPage(),
       Up1(),
     ];
@@ -397,7 +449,7 @@ class _MyHomePageState extends State<MyHomePage>
       child: Scaffold(
         appBar: AppBar(
           systemOverlayStyle:
-              SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+          SystemUiOverlayStyle(statusBarColor: Colors.transparent),
           bottom: TabBar(
             controller: _controller,
             tabs: _buildTabs(context),
@@ -513,7 +565,8 @@ class friend_menu extends StatelessWidget {
     // TODO: implement build
 
     return PopupMenuButton<String>(
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+      itemBuilder: (BuildContext context) =>
+      <PopupMenuEntry<String>>[
         const PopupMenuItem<String>(
           value: "1",
           //アイコンに変えとく
@@ -559,14 +612,14 @@ class user_menu extends StatelessWidget {
           children: [
             Imageset?.image_user() == null
                 ? Icon(
-                    Icons.face,
-                    size: 50,
-                  )
+              Icons.face,
+              size: 50,
+            )
                 : Image(
-                    image: Imageset?.image_user(),
-                    width: 50,
-                    height: 50,
-                  ),
+              image: Imageset?.image_user(),
+              width: 50,
+              height: 50,
+            ),
             Text(
               "$user",
               style: TextStyle(

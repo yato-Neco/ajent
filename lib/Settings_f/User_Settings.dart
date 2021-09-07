@@ -24,7 +24,7 @@ class _usttings extends State<UStting> {
   Future getImageFromGallery_user() async {
 
 
-    lockScreen = lock_controller(null,true);
+    lockScreen = lock_controller(null,true , false);
 
 
 
@@ -43,7 +43,7 @@ class _usttings extends State<UStting> {
   Future getImageFromGallery_back() async {
 
 
-    lockScreen = lock_controller(null,true);
+    lockScreen = lock_controller(null,true, false);
 
 
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);

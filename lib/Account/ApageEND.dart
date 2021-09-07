@@ -190,7 +190,6 @@ class _AcreateEND extends State<AcreateEND> {
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => MyHomePage(
               title: 'Ajent',
-              user: user,
             ),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
@@ -198,7 +197,6 @@ class _AcreateEND extends State<AcreateEND> {
                   MaterialPageRoute(
                       builder: (context) => MyHomePage(
                             title: 'Ajent',
-                            user: user,
                           )),
                   context,
                   animation,

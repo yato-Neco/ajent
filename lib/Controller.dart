@@ -31,7 +31,7 @@ class Return_FristPage  {
       return Acreate();
     }else if(setUP == true && locled == false){
       //作り直し
-      return MyHomePage(title: "Ajent", user: "None");
+      return MyHomePage(title: "Ajent");
     }else if(setUP == true && locled == true){
       return LockScreen(false);
     }

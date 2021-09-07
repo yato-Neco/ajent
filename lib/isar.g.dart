@@ -17,7 +17,7 @@ import 'package:flutter/widgets.dart';
 const _utf8Encoder = Utf8Encoder();
 
 final _schema =
-    '[{"name":"fstPage_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"fstPage_setting","type":11},{"name":"setUP","type":0},{"name":"locled","type":0},{"name":"back","type":0},{"name":"passcode","type":0},{"name":"seitai","type":0},{"name":"auto","type":0}],"indexes":[],"links":[]},{"name":"user_data_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"user_name","type":5},{"name":"number","type":3},{"name":"uuid","type":5},{"name":"user_data","type":11}],"indexes":[],"links":[]}]';
+    '[{"name":"fstPage_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"fstPage_setting","type":11},{"name":"setUP","type":0},{"name":"locled","type":0},{"name":"back","type":0},{"name":"passcode","type":0},{"name":"seitai","type":0},{"name":"auto","type":0}],"indexes":[],"links":[]},{"name":"user_data_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"user_name","type":5},{"name":"number","type":3},{"name":"uuid","type":5},{"name":"user_data","type":11}],"indexes":[],"links":[]},{"name":"user_txt","idProperty":"id","properties":[{"name":"id","type":3},{"name":"user_name","type":5},{"name":"format_isar","type":5},{"name":"user_chat_txt","type":5}],"indexes":[],"links":[]}]';
 
 Future<Isar> openIsar(
     {String name = 'isar',
@@ -74,6 +74,26 @@ Future<Isar> openIsar(
             'number': 2,
             'uuid': 3,
             'user_data': 4
+          },
+          indexIds: {},
+          linkIds: {},
+          backlinkIds: {},
+          getId: (obj) => obj.id,
+          setId: (obj, id) => obj.id = id,
+        );
+        nCall(IC.isar_get_collection(isar.ptr, collectionPtrPtr, 2));
+        IC.isar_get_property_offsets(
+            collectionPtrPtr.value, propertyOffsetsPtr);
+        collections['user_txt'] = IsarCollectionImpl<user_txt>(
+          isar: isar,
+          adapter: _user_txtAdapter(),
+          ptr: collectionPtrPtr.value,
+          propertyOffsets: propertyOffsets.sublist(0, 4),
+          propertyIds: {
+            'id': 0,
+            'user_name': 1,
+            'format_isar': 2,
+            'user_chat_txt': 3
           },
           indexIds: {},
           linkIds: {},
@@ -290,6 +310,85 @@ class _user_data_isarAdapter extends TypeAdapter<user_data_isar> {
   }
 }
 
+class _user_txtAdapter extends TypeAdapter<user_txt> {
+  @override
+  int serialize(IsarCollectionImpl<user_txt> collection, RawObject rawObj,
+      user_txt object, List<int> offsets,
+      [int? existingBufferSize]) {
+    var dynamicSize = 0;
+    final value0 = object.id;
+    final _id = value0;
+    final value1 = object.user_name;
+    Uint8List? _user_name;
+    if (value1 != null) {
+      _user_name = _utf8Encoder.convert(value1);
+    }
+    dynamicSize += _user_name?.length ?? 0;
+    final value2 = object.format_isar;
+    Uint8List? _format_isar;
+    if (value2 != null) {
+      _format_isar = _utf8Encoder.convert(value2);
+    }
+    dynamicSize += _format_isar?.length ?? 0;
+    final value3 = object.user_chat_txt;
+    Uint8List? _user_chat_txt;
+    if (value3 != null) {
+      _user_chat_txt = _utf8Encoder.convert(value3);
+    }
+    dynamicSize += _user_chat_txt?.length ?? 0;
+    final size = dynamicSize + 34;
+
+    late int bufferSize;
+    if (existingBufferSize != null) {
+      if (existingBufferSize < size) {
+        malloc.free(rawObj.buffer);
+        rawObj.buffer = malloc(size);
+        bufferSize = size;
+      } else {
+        bufferSize = existingBufferSize;
+      }
+    } else {
+      rawObj.buffer = malloc(size);
+      bufferSize = size;
+    }
+    rawObj.buffer_length = size;
+    final buffer = rawObj.buffer.asTypedList(size);
+    final writer = BinaryWriter(buffer, 34);
+    writer.writeLong(offsets[0], _id);
+    writer.writeBytes(offsets[1], _user_name);
+    writer.writeBytes(offsets[2], _format_isar);
+    writer.writeBytes(offsets[3], _user_chat_txt);
+    return bufferSize;
+  }
+
+  @override
+  user_txt deserialize(IsarCollectionImpl<user_txt> collection,
+      BinaryReader reader, List<int> offsets) {
+    final object = user_txt();
+    object.id = reader.readLongOrNull(offsets[0]);
+    object.user_name = reader.readStringOrNull(offsets[1]);
+    object.format_isar = reader.readStringOrNull(offsets[2]);
+    object.user_chat_txt = reader.readStringOrNull(offsets[3]);
+    return object;
+  }
+
+  @override
+  P deserializeProperty<P>(BinaryReader reader, int propertyIndex, int offset) {
+    switch (propertyIndex) {
+      case 0:
+        return (reader.readLongOrNull(offset)) as P;
+      case 1:
+        return (reader.readStringOrNull(offset)) as P;
+      case 2:
+        return (reader.readStringOrNull(offset)) as P;
+      case 3:
+        return (reader.readStringOrNull(offset)) as P;
+      default:
+        throw 'Illegal propertyIndex';
+    }
+  }
+}
+
 extension GetCollection on Isar {
   IsarCollection<fstPage_isar> get fstPage_isars {
     return getCollection('fstPage_isar');
@@ -297,6 +396,10 @@ extension GetCollection on Isar {
 
   IsarCollection<user_data_isar> get user_data_isars {
     return getCollection('user_data_isar');
+  }
+
+  IsarCollection<user_txt> get user_txts {
+    return getCollection('user_txt');
   }
 }
 
@@ -316,6 +419,14 @@ extension user_data_isarQueryWhereSort on QueryBuilder<user_data_isar, QWhere> {
 
 extension user_data_isarQueryWhere
     on QueryBuilder<user_data_isar, QWhereClause> {}
+
+extension user_txtQueryWhereSort on QueryBuilder<user_txt, QWhere> {
+  QueryBuilder<user_txt, QAfterWhere> anyId() {
+    return addWhereClause(WhereClause(indexName: 'id'));
+  }
+}
+
+extension user_txtQueryWhere on QueryBuilder<user_txt, QWhereClause> {}
 
 extension fstPage_isarQueryFilter
     on QueryBuilder<fstPage_isar, QFilterCondition> {
@@ -684,11 +795,259 @@ extension user_data_isarQueryFilter
   }
 }
 
+extension user_txtQueryFilter on QueryBuilder<user_txt, QFilterCondition> {
+  QueryBuilder<user_txt, QAfterFilterCondition> idIsNull() {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'id',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> idEqualTo(int? value) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'id',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> idGreaterThan(int? value) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Gt,
+      property: 'id',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> idLessThan(int? value) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Lt,
+      property: 'id',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> idBetween(
+      int? lower, int? upper) {
+    return addFilterCondition(FilterCondition.between(
+      property: 'id',
+      lower: lower,
+      upper: upper,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_nameIsNull() {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'user_name',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_nameEqualTo(String? value,
+      {bool caseSensitive = true}) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'user_name',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_nameStartsWith(
+      String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.StartsWith,
+      property: 'user_name',
+      value: convertedValue,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_nameEndsWith(String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.EndsWith,
+      property: 'user_name',
+      value: convertedValue,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_nameContains(String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Matches,
+      property: 'user_name',
+      value: '*$convertedValue*',
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_nameMatches(String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Matches,
+      property: 'user_name',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> format_isarIsNull() {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'format_isar',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> format_isarEqualTo(
+      String? value,
+      {bool caseSensitive = true}) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'format_isar',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> format_isarStartsWith(
+      String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.StartsWith,
+      property: 'format_isar',
+      value: convertedValue,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> format_isarEndsWith(
+      String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.EndsWith,
+      property: 'format_isar',
+      value: convertedValue,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> format_isarContains(
+      String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Matches,
+      property: 'format_isar',
+      value: '*$convertedValue*',
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> format_isarMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Matches,
+      property: 'format_isar',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_chat_txtIsNull() {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'user_chat_txt',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_chat_txtEqualTo(
+      String? value,
+      {bool caseSensitive = true}) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'user_chat_txt',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_chat_txtStartsWith(
+      String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.StartsWith,
+      property: 'user_chat_txt',
+      value: convertedValue,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_chat_txtEndsWith(
+      String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.EndsWith,
+      property: 'user_chat_txt',
+      value: convertedValue,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_chat_txtContains(
+      String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Matches,
+      property: 'user_chat_txt',
+      value: '*$convertedValue*',
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> user_chat_txtMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Matches,
+      property: 'user_chat_txt',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+}
+
 extension fstPage_isarQueryLinks
     on QueryBuilder<fstPage_isar, QFilterCondition> {}
 
 extension user_data_isarQueryLinks
     on QueryBuilder<user_data_isar, QFilterCondition> {}
+
+extension user_txtQueryLinks on QueryBuilder<user_txt, QFilterCondition> {}
 
 extension fstPage_isarQueryWhereSortBy on QueryBuilder<fstPage_isar, QSortBy> {
   QueryBuilder<fstPage_isar, QAfterSortBy> sortById() {
@@ -877,6 +1236,74 @@ extension user_data_isarQueryWhereSortThenBy
   }
 }
 
+extension user_txtQueryWhereSortBy on QueryBuilder<user_txt, QSortBy> {
+  QueryBuilder<user_txt, QAfterSortBy> sortById() {
+    return addSortByInternal('id', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> sortByIdDesc() {
+    return addSortByInternal('id', Sort.Desc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> sortByUser_name() {
+    return addSortByInternal('user_name', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> sortByUser_nameDesc() {
+    return addSortByInternal('user_name', Sort.Desc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> sortByFormat_isar() {
+    return addSortByInternal('format_isar', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> sortByFormat_isarDesc() {
+    return addSortByInternal('format_isar', Sort.Desc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> sortByUser_chat_txt() {
+    return addSortByInternal('user_chat_txt', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> sortByUser_chat_txtDesc() {
+    return addSortByInternal('user_chat_txt', Sort.Desc);
+  }
+}
+
+extension user_txtQueryWhereSortThenBy on QueryBuilder<user_txt, QSortThenBy> {
+  QueryBuilder<user_txt, QAfterSortBy> thenById() {
+    return addSortByInternal('id', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> thenByIdDesc() {
+    return addSortByInternal('id', Sort.Desc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> thenByUser_name() {
+    return addSortByInternal('user_name', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> thenByUser_nameDesc() {
+    return addSortByInternal('user_name', Sort.Desc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> thenByFormat_isar() {
+    return addSortByInternal('format_isar', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> thenByFormat_isarDesc() {
+    return addSortByInternal('format_isar', Sort.Desc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> thenByUser_chat_txt() {
+    return addSortByInternal('user_chat_txt', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> thenByUser_chat_txtDesc() {
+    return addSortByInternal('user_chat_txt', Sort.Desc);
+  }
+}
+
 extension fstPage_isarQueryWhereDistinct
     on QueryBuilder<fstPage_isar, QDistinct> {
   QueryBuilder<fstPage_isar, QDistinct> distinctById() {
@@ -926,6 +1353,27 @@ extension user_data_isarQueryWhereDistinct
   QueryBuilder<user_data_isar, QDistinct> distinctByUuid(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('uuid', caseSensitive: caseSensitive);
+  }
+}
+
+extension user_txtQueryWhereDistinct on QueryBuilder<user_txt, QDistinct> {
+  QueryBuilder<user_txt, QDistinct> distinctById() {
+    return addDistinctByInternal('id');
+  }
+
+  QueryBuilder<user_txt, QDistinct> distinctByUser_name(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('user_name', caseSensitive: caseSensitive);
+  }
+
+  QueryBuilder<user_txt, QDistinct> distinctByFormat_isar(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('format_isar', caseSensitive: caseSensitive);
+  }
+
+  QueryBuilder<user_txt, QDistinct> distinctByUser_chat_txt(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('user_chat_txt', caseSensitive: caseSensitive);
   }
 }
 
@@ -984,5 +1432,23 @@ extension user_data_isarQueryProperty
 
   QueryBuilder<List<String>?, QQueryOperations> user_dataProperty() {
     return addPropertyName('user_data');
+  }
+}
+
+extension user_txtQueryProperty on QueryBuilder<user_txt, QQueryProperty> {
+  QueryBuilder<int?, QQueryOperations> idProperty() {
+    return addPropertyName('id');
+  }
+
+  QueryBuilder<String?, QQueryOperations> user_nameProperty() {
+    return addPropertyName('user_name');
+  }
+
+  QueryBuilder<String?, QQueryOperations> format_isarProperty() {
+    return addPropertyName('format_isar');
+  }
+
+  QueryBuilder<String?, QQueryOperations> user_chat_txtProperty() {
+    return addPropertyName('user_chat_txt');
   }
 }

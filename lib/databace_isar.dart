@@ -39,3 +39,16 @@ class user_data_isar {
 
 
 }
+
+@Collection()
+class user_txt {
+  int? id; // auto increment id
+
+  String? user_name;
+
+  String? format_isar;
+
+  String? user_chat_txt;
+
+
+}
