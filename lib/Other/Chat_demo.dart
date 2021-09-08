@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart' as md;
@@ -176,10 +177,54 @@ class NTestPage2 extends State<TestPage2> {
 
   void initState() {
     super.initState();
+    FCM();
 
 
     HINT_LOAD();
   }
+
+
+
+  void FCM() async {
+
+
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
+
+
+    String? token = await messaging.getToken(
+      vapidKey: "BFrfO2CQfaaXTDdWsi8dTkJkEJoj5sT1lTeUJeW6vdURh5tWv1fpCAcYwxGqh98q-0j0JT7h1CxErteWQwoqxD4",
+    );
+
+    print("$token");
+
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data.toString()}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+    });
+
+
+  }
+
+
+
+
 
   void HINT_LOAD() async {
 

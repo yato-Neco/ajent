@@ -16,15 +16,21 @@ import 'uppermenu/Upper1.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:isar/isar.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_sliding_tutorial/flutter_sliding_tutorial.dart';
 
 //バグ、右スワイプすると画面が固まる--修正完了
 
 Return_FristPage? fstPage;
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
+
+
+
+
 
   final isar = await openIsar();
 
