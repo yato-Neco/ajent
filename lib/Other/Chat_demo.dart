@@ -177,7 +177,7 @@ class NTestPage2 extends State<TestPage2> {
 
   void initState() {
     super.initState();
-    FCM();
+    //FCM();
 
 
     HINT_LOAD();
