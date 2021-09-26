@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:ffi';
 
+import 'package:ajent/Chat/Chat_page.dart';
 import 'package:ajent/SettingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'Lock_screen/Lock_Controller.dart';
 import 'Other/1.dart';
-import 'Other/Chat_demo.dart';
+import 'Chat/Chat_demo.dart';
 import 'Settings_f/Security_Settings.dart';
 import 'Settings_f/User_Settings.dart';
 import 'Controller.dart';
@@ -110,6 +111,49 @@ class TabPage extends StatefulWidget {
 class _Tabpage extends State<TabPage> {
   List<Widget> friend_list = [];
 
+  String? user;
+
+  @override
+  void initState() {
+    super.initState();
+    Usar_data();
+  }
+
+
+  void Usar_data() async {
+    Map<String, String?>? demoMap = {
+      "user": null,
+      "number": null,
+      "uuid": null
+    };
+
+    user_dataDEMO() async {
+      final isar = await openIsar();
+
+      final test = isar.user_data_isars;
+
+      var user_data = await test.get(0);
+
+      return user_data?.user_data;
+    }
+
+    List<String>? userData = await user_dataDEMO();
+
+    userData?.forEach((e) {
+      List<String> has = e.split(": ");
+
+      demoMap[has[0]] = has[1];
+    });
+
+    user = demoMap["user"];
+
+    if (mounted) {
+      // initState内でsetStateを呼び出すに必要
+      setState(() => user = user);
+    }
+  }
+
+
   List<Widget> Friend_void() {
     friend_list = [
       Card(
@@ -143,7 +187,7 @@ class _Tabpage extends State<TabPage> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context)
                 {
-                  return TestPage2("local");
+                  return Chat_page(user: user,partner: "loacl",);
                 }));
               },
               child: Text("C"),

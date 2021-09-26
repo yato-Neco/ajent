@@ -17,7 +17,7 @@ import 'package:flutter/widgets.dart';
 const _utf8Encoder = Utf8Encoder();
 
 final _schema =
-    '[{"name":"fstPage_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"fstPage_setting","type":11},{"name":"setUP","type":0},{"name":"locled","type":0},{"name":"back","type":0},{"name":"passcode","type":0},{"name":"seitai","type":0},{"name":"auto","type":0}],"indexes":[],"links":[]},{"name":"user_data_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"user_name","type":5},{"name":"number","type":3},{"name":"uuid","type":5},{"name":"user_data","type":11}],"indexes":[],"links":[]},{"name":"user_txt","idProperty":"id","properties":[{"name":"id","type":3},{"name":"user_name","type":5},{"name":"format_isar","type":5},{"name":"user_chat_txt","type":5}],"indexes":[],"links":[]}]';
+    '[{"name":"fstPage_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"fstPage_setting","type":11},{"name":"setUP","type":0},{"name":"locled","type":0},{"name":"back","type":0},{"name":"passcode","type":0},{"name":"seitai","type":0},{"name":"auto","type":0}],"indexes":[],"links":[]},{"name":"user_data_isar","idProperty":"id","properties":[{"name":"id","type":3},{"name":"user_name","type":5},{"name":"number","type":3},{"name":"uuid","type":5},{"name":"user_data","type":11}],"indexes":[],"links":[]},{"name":"user_txt","idProperty":"id","properties":[{"name":"id","type":3},{"name":"user_name","type":5},{"name":"partner_name","type":5},{"name":"format_isar","type":5},{"name":"user_chat_txt","type":5},{"name":"time","type":5}],"indexes":[],"links":[]}]';
 
 Future<Isar> openIsar(
     {String name = 'isar',
@@ -88,12 +88,14 @@ Future<Isar> openIsar(
           isar: isar,
           adapter: _user_txtAdapter(),
           ptr: collectionPtrPtr.value,
-          propertyOffsets: propertyOffsets.sublist(0, 4),
+          propertyOffsets: propertyOffsets.sublist(0, 6),
           propertyIds: {
             'id': 0,
             'user_name': 1,
-            'format_isar': 2,
-            'user_chat_txt': 3
+            'partner_name': 2,
+            'format_isar': 3,
+            'user_chat_txt': 4,
+            'time': 5
           },
           indexIds: {},
           linkIds: {},
@@ -324,19 +326,31 @@ class _user_txtAdapter extends TypeAdapter<user_txt> {
       _user_name = _utf8Encoder.convert(value1);
     }
     dynamicSize += _user_name?.length ?? 0;
-    final value2 = object.format_isar;
-    Uint8List? _format_isar;
+    final value2 = object.partner_name;
+    Uint8List? _partner_name;
     if (value2 != null) {
-      _format_isar = _utf8Encoder.convert(value2);
+      _partner_name = _utf8Encoder.convert(value2);
+    }
+    dynamicSize += _partner_name?.length ?? 0;
+    final value3 = object.format_isar;
+    Uint8List? _format_isar;
+    if (value3 != null) {
+      _format_isar = _utf8Encoder.convert(value3);
     }
     dynamicSize += _format_isar?.length ?? 0;
-    final value3 = object.user_chat_txt;
+    final value4 = object.user_chat_txt;
     Uint8List? _user_chat_txt;
-    if (value3 != null) {
-      _user_chat_txt = _utf8Encoder.convert(value3);
+    if (value4 != null) {
+      _user_chat_txt = _utf8Encoder.convert(value4);
     }
     dynamicSize += _user_chat_txt?.length ?? 0;
-    final size = dynamicSize + 34;
+    final value5 = object.time;
+    Uint8List? _time;
+    if (value5 != null) {
+      _time = _utf8Encoder.convert(value5);
+    }
+    dynamicSize += _time?.length ?? 0;
+    final size = dynamicSize + 50;
 
     late int bufferSize;
     if (existingBufferSize != null) {
@@ -353,11 +367,13 @@ class _user_txtAdapter extends TypeAdapter<user_txt> {
     }
     rawObj.buffer_length = size;
     final buffer = rawObj.buffer.asTypedList(size);
-    final writer = BinaryWriter(buffer, 34);
+    final writer = BinaryWriter(buffer, 50);
     writer.writeLong(offsets[0], _id);
     writer.writeBytes(offsets[1], _user_name);
-    writer.writeBytes(offsets[2], _format_isar);
-    writer.writeBytes(offsets[3], _user_chat_txt);
+    writer.writeBytes(offsets[2], _partner_name);
+    writer.writeBytes(offsets[3], _format_isar);
+    writer.writeBytes(offsets[4], _user_chat_txt);
+    writer.writeBytes(offsets[5], _time);
     return bufferSize;
   }
 
@@ -367,8 +383,10 @@ class _user_txtAdapter extends TypeAdapter<user_txt> {
     final object = user_txt();
     object.id = reader.readLongOrNull(offsets[0]);
     object.user_name = reader.readStringOrNull(offsets[1]);
-    object.format_isar = reader.readStringOrNull(offsets[2]);
-    object.user_chat_txt = reader.readStringOrNull(offsets[3]);
+    object.partner_name = reader.readStringOrNull(offsets[2]);
+    object.format_isar = reader.readStringOrNull(offsets[3]);
+    object.user_chat_txt = reader.readStringOrNull(offsets[4]);
+    object.time = reader.readStringOrNull(offsets[5]);
     return object;
   }
 
@@ -382,6 +400,10 @@ class _user_txtAdapter extends TypeAdapter<user_txt> {
       case 2:
         return (reader.readStringOrNull(offset)) as P;
       case 3:
+        return (reader.readStringOrNull(offset)) as P;
+      case 4:
+        return (reader.readStringOrNull(offset)) as P;
+      case 5:
         return (reader.readStringOrNull(offset)) as P;
       default:
         throw 'Illegal propertyIndex';
@@ -902,6 +924,75 @@ extension user_txtQueryFilter on QueryBuilder<user_txt, QFilterCondition> {
     ));
   }
 
+  QueryBuilder<user_txt, QAfterFilterCondition> partner_nameIsNull() {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'partner_name',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> partner_nameEqualTo(
+      String? value,
+      {bool caseSensitive = true}) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'partner_name',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> partner_nameStartsWith(
+      String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.StartsWith,
+      property: 'partner_name',
+      value: convertedValue,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> partner_nameEndsWith(
+      String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.EndsWith,
+      property: 'partner_name',
+      value: convertedValue,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> partner_nameContains(
+      String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Matches,
+      property: 'partner_name',
+      value: '*$convertedValue*',
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> partner_nameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Matches,
+      property: 'partner_name',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
   QueryBuilder<user_txt, QAfterFilterCondition> format_isarIsNull() {
     return addFilterCondition(FilterCondition(
       type: ConditionType.Eq,
@@ -1035,6 +1126,70 @@ extension user_txtQueryFilter on QueryBuilder<user_txt, QFilterCondition> {
     return addFilterCondition(FilterCondition(
       type: ConditionType.Matches,
       property: 'user_chat_txt',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> timeIsNull() {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'time',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> timeEqualTo(String? value,
+      {bool caseSensitive = true}) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Eq,
+      property: 'time',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> timeStartsWith(String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.StartsWith,
+      property: 'time',
+      value: convertedValue,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> timeEndsWith(String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.EndsWith,
+      property: 'time',
+      value: convertedValue,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> timeContains(String? value,
+      {bool caseSensitive = true}) {
+    final convertedValue = value;
+    assert(convertedValue != null, 'Null values are not allowed');
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Matches,
+      property: 'time',
+      value: '*$convertedValue*',
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<user_txt, QAfterFilterCondition> timeMatches(String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterCondition(FilterCondition(
+      type: ConditionType.Matches,
+      property: 'time',
       value: pattern,
       caseSensitive: caseSensitive,
     ));
@@ -1253,6 +1408,14 @@ extension user_txtQueryWhereSortBy on QueryBuilder<user_txt, QSortBy> {
     return addSortByInternal('user_name', Sort.Desc);
   }
 
+  QueryBuilder<user_txt, QAfterSortBy> sortByPartner_name() {
+    return addSortByInternal('partner_name', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> sortByPartner_nameDesc() {
+    return addSortByInternal('partner_name', Sort.Desc);
+  }
+
   QueryBuilder<user_txt, QAfterSortBy> sortByFormat_isar() {
     return addSortByInternal('format_isar', Sort.Asc);
   }
@@ -1267,6 +1430,14 @@ extension user_txtQueryWhereSortBy on QueryBuilder<user_txt, QSortBy> {
 
   QueryBuilder<user_txt, QAfterSortBy> sortByUser_chat_txtDesc() {
     return addSortByInternal('user_chat_txt', Sort.Desc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> sortByTime() {
+    return addSortByInternal('time', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> sortByTimeDesc() {
+    return addSortByInternal('time', Sort.Desc);
   }
 }
 
@@ -1287,6 +1458,14 @@ extension user_txtQueryWhereSortThenBy on QueryBuilder<user_txt, QSortThenBy> {
     return addSortByInternal('user_name', Sort.Desc);
   }
 
+  QueryBuilder<user_txt, QAfterSortBy> thenByPartner_name() {
+    return addSortByInternal('partner_name', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> thenByPartner_nameDesc() {
+    return addSortByInternal('partner_name', Sort.Desc);
+  }
+
   QueryBuilder<user_txt, QAfterSortBy> thenByFormat_isar() {
     return addSortByInternal('format_isar', Sort.Asc);
   }
@@ -1301,6 +1480,14 @@ extension user_txtQueryWhereSortThenBy on QueryBuilder<user_txt, QSortThenBy> {
 
   QueryBuilder<user_txt, QAfterSortBy> thenByUser_chat_txtDesc() {
     return addSortByInternal('user_chat_txt', Sort.Desc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> thenByTime() {
+    return addSortByInternal('time', Sort.Asc);
+  }
+
+  QueryBuilder<user_txt, QAfterSortBy> thenByTimeDesc() {
+    return addSortByInternal('time', Sort.Desc);
   }
 }
 
@@ -1366,6 +1553,11 @@ extension user_txtQueryWhereDistinct on QueryBuilder<user_txt, QDistinct> {
     return addDistinctByInternal('user_name', caseSensitive: caseSensitive);
   }
 
+  QueryBuilder<user_txt, QDistinct> distinctByPartner_name(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('partner_name', caseSensitive: caseSensitive);
+  }
+
   QueryBuilder<user_txt, QDistinct> distinctByFormat_isar(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('format_isar', caseSensitive: caseSensitive);
@@ -1374,6 +1566,11 @@ extension user_txtQueryWhereDistinct on QueryBuilder<user_txt, QDistinct> {
   QueryBuilder<user_txt, QDistinct> distinctByUser_chat_txt(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('user_chat_txt', caseSensitive: caseSensitive);
+  }
+
+  QueryBuilder<user_txt, QDistinct> distinctByTime(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('time', caseSensitive: caseSensitive);
   }
 }
 
@@ -1444,11 +1641,19 @@ extension user_txtQueryProperty on QueryBuilder<user_txt, QQueryProperty> {
     return addPropertyName('user_name');
   }
 
+  QueryBuilder<String?, QQueryOperations> partner_nameProperty() {
+    return addPropertyName('partner_name');
+  }
+
   QueryBuilder<String?, QQueryOperations> format_isarProperty() {
     return addPropertyName('format_isar');
   }
 
   QueryBuilder<String?, QQueryOperations> user_chat_txtProperty() {
     return addPropertyName('user_chat_txt');
+  }
+
+  QueryBuilder<String?, QQueryOperations> timeProperty() {
+    return addPropertyName('time');
   }
 }

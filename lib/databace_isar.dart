@@ -46,9 +46,16 @@ class user_txt {
 
   String? user_name;
 
+  String? partner_name;
+
   String? format_isar;
 
   String? user_chat_txt;
+
+
+  String? time;
+
+
 
 
 }

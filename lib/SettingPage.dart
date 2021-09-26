@@ -27,11 +27,7 @@ class Settings extends State<Setting> {
     aircraft = Platform.localeName;
 
     WidgetsFlutterBinding.ensureInitialized();
-
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,29 +40,27 @@ class Settings extends State<Setting> {
       maxHeight = size.height - padding.top - kToolbarHeight;
     } else if (Platform.isIOS) {
       maxHeight = size.height - padding.top - padding.bottom - 22;
-
     }
 
-
-
-    Future _showSimpleDialog() async {
-      String? result = "";
-      result = await showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
+/*
+SimpleDialog(
             title: Text(''),
+            backgroundColor: Colors.transparent.withOpacity(0.0),
+
             children: <Widget>[
+
+
+
+
+/*
               SimpleDialogOption(
+
                 child: ListTile(
                   title: Text('イースターエッグ'),
+
                 ),
                 onPressed: () {
-                  Navigator.pop(
-                    context,
-                    "イースターエッグ",
-                  );
+
                 },
               ),
               SimpleDialogOption(
@@ -80,7 +74,40 @@ class Settings extends State<Setting> {
                   );
                 },
               ),
+
+
+ */
             ],
+          );
+ */
+
+    Future _showSimpleDialog() async {
+      String? result = "";
+      result = await showDialog(
+        barrierDismissible: false,
+        context: context,
+        barrierColor: Colors.transparent,
+        builder: (BuildContext context) {
+          return Container(
+
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.blue,
+            ),
+            child: GestureDetector(
+              onLongPressStart: (a){
+                print(a);
+
+              },
+              onLongPressEnd: (a){
+                print(a);
+                Navigator.pop(
+                  context,
+                  "back",
+                );
+          }
+            ),
+
           );
         },
       );
@@ -157,8 +184,6 @@ class Settings extends State<Setting> {
     _setLabel(result);
   }
      */
-
-
 
     Future<void> _showMyDialog() async {
       return showDialog<void>(
@@ -364,10 +389,8 @@ class Settings extends State<Setting> {
                           if (i == 5) {
                             i = 0;
 
-
                             //_showMyDialog();
                             _showSimpleDialog();
-
 
                             /*
 
